@@ -1,0 +1,11 @@
+export const SIGNIN = '/login';
+export const COMPANIES = '/companies';
+export const VOLUNTEERS = '/volunteers';
+export const PANELS = '/panels';
+export const INTERVIEPANNEL = '/interviewpanel'
+export const INTERVIEWEE = '/interviewvolunteer'
+export const INTERVIEWEEBASIC = '/interviewee'
+export const VOLUNTEERPROFILE = '/intervieweeprofile/:id'
+export const UPLOADFILES = "/upload"
+export const CONTACTVOLUNTEER = "/contactvolunteer"
+export const INTERVIEWEELIST = "/intervieweelist"
