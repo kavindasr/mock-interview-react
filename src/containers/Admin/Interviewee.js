@@ -126,7 +126,7 @@ const Companies = props => {
               .then((response) => {
                   if (!response.error) {
                       addAlert({
-                          message: "Company Saved Successfully!",
+                          message: "Interviewee Saved Successfully!",
                       });
                       setComanies(addItemToArray(companies, response.data))
                       return resolve();

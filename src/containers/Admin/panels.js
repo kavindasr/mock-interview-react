@@ -60,7 +60,7 @@ const Companies = props => {
                 console.log(response);
                   if (!response.error) {
                       addAlert({
-                          message: "Company deletion Successful!",
+                          message: "Panel deletion Successful!",
                       });
                       setComanies(removeItemFromArray(companies, 'panelID', oldcompanies.panelID, oldcompanies))
                       return resolve();
@@ -77,12 +77,24 @@ const Companies = props => {
 
   const updateCompany = useCallback(
     (newCompanies,oldCompanies) => {
+      var data=({
+        "companyID": newCompanies.companyID,
+        "name": newCompanies.name,
+        "email": newCompanies.email,
+        "link": newCompanies.link,
+        "contactNo": newCompanies.contactNo,
+        "Volunteer": [
+          {
+              "volunteerID" : newCompanies.volunteerID 
+          }
+      ]
+      })
       return new Promise((resolve, reject) => {
-        updatePanels(oldCompanies.panelID, newCompanies)
+        updatePanels(oldCompanies.panelID, data)
               .then((response) => {
                   if (!response.error) {
                       addAlert({
-                          message: "Company Updated Successfully!",
+                          message: "Panel Updated Successfully!",
                       });
                       setComanies(replaceItemInArray(companies, 'panelID', newCompanies, oldCompanies.panelID))
                       return resolve();
@@ -118,7 +130,7 @@ const Companies = props => {
               .then((response) => {
                   if (!response.error) {
                       addAlert({
-                          message: "Company Saved Successfully!",
+                          message: "Panel Saved Successfully!",
                       });
                       setComanies(addItemToArray(companies, response.data))
                       return resolve();

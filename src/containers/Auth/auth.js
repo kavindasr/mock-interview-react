@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect}  from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -150,6 +151,17 @@ function SignIn(props) {
             history.push(routez.INTERVIEWEE);
         }
     }
+    let authRedirect = null;
+    if (props.isAuthenticated) {
+        if(props.usertype.toUpperCase()==="ADMIN" ){
+            authRedirect = <Redirect to={routez.COMPANIES} />
+        }else if(props.usertype.toUpperCase()==="PANEL" ){
+            authRedirect = <Redirect to={routez.INTERVIEPANNEL} />
+        }else if(props.usertype.toUpperCase()==="VOLUNTEER" ){
+            authRedirect = <Redirect to={routez.INTERVIEWEE} />
+        }
+        
+    }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -176,6 +188,7 @@ function SignIn(props) {
                     </Button>
                 </form>
             </div>
+            {authRedirect}
         </Grid>
     </Grid>
   );
