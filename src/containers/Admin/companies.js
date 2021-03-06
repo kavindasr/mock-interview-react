@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { getAllCompanies, deleteCompanies, updateCompanies, saveCompamies } from '../../api/CompaniesAPI';
+import { getAllCompanies, updateCompanies, saveCompamies } from '../../api/CompaniesAPI';
 import { replaceItemInArray, removeItemFromArray, addItemToArray } from '../../shared/utility';
 import Table from '../../components/UI/Table/MaterialTable/Table';
 import * as actions from '../../store/actions/index';
-import { Button } from '@material-ui/core';
 import {getSocket} from '../../services/socket';
 
 const CompanyTable = 'Company Table';
@@ -17,7 +15,6 @@ const tableOptions = {
 };
 
 const Companies = (props) => {
-	let history = useHistory();
 
 	const [companies, setComanies] = useState([]);
 	useEffect(() => {
@@ -63,27 +60,27 @@ const Companies = (props) => {
 	const { addAlert } = props;
 	// const [isLoading, setIsLoading] = useState(true);
 
-	const deleteCompany = useCallback(
-		(oldcompanies) => {
-			return new Promise((resolve, reject) => {
-				deleteCompanies(oldcompanies.companyID).then((response) => {
-					console.log(response);
-					if (!response.error) {
-						addAlert({
-							message: 'Company deletion Successful!',
-						});
-						setComanies(removeItemFromArray(companies, 'companyID', oldcompanies.companyID, oldcompanies));
-						return resolve();
-					}
-					addAlert({
-						message: 'Failed!',
-					});
-					return reject();
-				});
-			});
-		},
-		[addAlert, companies]
-	);
+	// const deleteCompany = useCallback(
+	// 	(oldcompanies) => {
+	// 		return new Promise((resolve, reject) => {
+	// 			deleteCompanies(oldcompanies.companyID).then((response) => {
+	// 				console.log(response);
+	// 				if (!response.error) {
+	// 					addAlert({
+	// 						message: 'Company deletion Successful!',
+	// 					});
+	// 					setComanies(removeItemFromArray(companies, 'companyID', oldcompanies.companyID, oldcompanies));
+	// 					return resolve();
+	// 				}
+	// 				addAlert({
+	// 					message: 'Failed!',
+	// 				});
+	// 				return reject();
+	// 			});
+	// 		});
+	// 	},
+	// 	[addAlert, companies]
+	// );
 
 	const updateCompany = useCallback(
 		(newCompanies, oldCompanies) => {
@@ -133,14 +130,14 @@ const Companies = (props) => {
 		[addAlert, companies]
 	);
 
-	const renderProfileBtn = useCallback(
-		(rowData) => (
-			<Button color="primary" onClick={() => history.push(`users/${rowData.officerID}`)}>
-				Profile
-			</Button>
-		),
-		[history]
-	);
+	// const renderProfileBtn = useCallback(
+	// 	(rowData) => (
+	// 		<Button color="primary" onClick={() => history.push(`users/${rowData.officerID}`)}>
+	// 			Profile
+	// 		</Button>
+	// 	),
+	// 	[history]
+	// );
 
 	const tableColumns = [
 		{ title: 'Company Id', field: 'companyID', editable: 'never' },

@@ -1,15 +1,13 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import Axios from 'axios';
-import Image from 'cloudinary-react';
 
 import {getAllInterviewee, deleteInterviewee, updateInterviewee, saveInterviewee } from "../../api/IntervieweeAPI"
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
-import { Button } from "@material-ui/core";
 import {getSocket} from '../../services/socket';
+import Navbar from "../../components/UI/Navbar/NavbarVolun";
 
 const CompanyTable = "Interviewee Table";
 
@@ -19,7 +17,6 @@ const tableOptions = {
 };
 
 const Companies = props => {
-  let history = useHistory();
 
   const [companies, setComanies ] = useState([]);
   const [imageUrl,setimageUrl] =useState("");
@@ -32,7 +29,7 @@ const Companies = props => {
             setComanies(response.data)
           }
         })
-  }, []);
+  }, [props.userId]);
 
   useEffect(() => {
 		let socket = getSocket();
@@ -111,7 +108,7 @@ const Companies = props => {
               })
       });
     },
-    [addAlert, companies]
+    [addAlert, companies, imageUrl]
   );
 
   const saveCompany = useCallback(
@@ -157,8 +154,6 @@ const Companies = props => {
         formdata
       ).then((response) => {
         setimageUrl(response.data.url)
-        console.log(response.data.url)
-        console.log(imageUrl)
       })
       .catch((error) => {
         console.log(error)
@@ -169,13 +164,13 @@ const Companies = props => {
       // xhr.send(formdata);
       // const imageResponse = JSON.parse(xhr.responseText);
     })
-  });
+  },[]);
   
-  const renderCVBtn = useCallback(
-    (rowData) => {
-      <input type="file"/>
-    },[]
-  );
+  // const renderCVBtn = useCallback(
+  //   (rowData) => {
+  //     <input type="file"/>
+  //   },[]
+  // );
 
   const renderImgBtn = useCallback(
     (rowData) => 
@@ -188,7 +183,7 @@ const Companies = props => {
         />
         {/* <button onClick={() => uploadImage(imageSelected)}>Upload Images</button> */}
       </div>,
-     []
+     [uploadImage]
   );
 
   const tableColumns = [
@@ -206,19 +201,31 @@ const Companies = props => {
   if (false) {
     //return <Spinner />
   } else {
-    return <Table
-      data={companies}
-      title={CompanyTable}
-      columns={tableColumns}
-      tableOptions={tableOptions}
-      editable={{
-        onRowAdd: newData =>saveCompany(newData),
-        onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
-        onRowDelete: oldData => deleteCompany(oldData),
-      }}
-    />
+    return(
+      <React.Fragment>
+        <Navbar companyName="ABC Company" link="uom.lk"/>
+        <Table
+          data={companies}
+          title={CompanyTable}
+          columns={tableColumns}
+          tableOptions={tableOptions}
+          editable={{
+            onRowAdd: newData =>saveCompany(newData),
+            onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
+            onRowDelete: oldData => deleteCompany(oldData),
+          }}
+        />
+      </React.Fragment>
+    )
   }
 };
+
+const mapStateToProps = (state) => {
+  return {
+      error: state.auth.error,
+      userId:state.auth.userId,
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -226,4 +233,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-export default connect(null, mapDispatchToProps)(Companies);
+export default connect(mapStateToProps, mapDispatchToProps)(Companies);

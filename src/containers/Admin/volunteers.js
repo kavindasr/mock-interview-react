@@ -1,12 +1,10 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 
 import {getAllUsers, deleteUsers, updateUsers, saveUsers } from "../../api/VolunteerAPI"
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
-import { Button } from "@material-ui/core";
 import {getSocket} from '../../services/socket';
 
 const UserTable = "User Table";
@@ -17,7 +15,6 @@ const tableOptions = {
 };
 
 const Users = props => {
-  let history = useHistory();
 
   const [users, setUsers] = useState([]);
   useEffect(() => {
@@ -81,6 +78,7 @@ const Users = props => {
 
   const updateUser = useCallback(
     (newUser,oldUser) => {
+      console.log(JSON.stringify(newUser))
       return new Promise((resolve, reject) => {
           updateUsers(oldUser.id, newUser)
               .then((response) => {
@@ -110,6 +108,7 @@ const Users = props => {
         "role": newUser.role,
         "contactNo": newUser.contactNo,
       })
+      console.log(JSON.stringify(data))
       return new Promise((resolve, reject) => {
         saveUsers(data)
               .then((response) => {
@@ -130,16 +129,16 @@ const Users = props => {
     [addAlert, users]
   );
   
-  const renderProfileBtn = useCallback(
-    (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.id}`)}>Profile</Button>,
-    [history]
-  );
+  // const renderProfileBtn = useCallback(
+  //   (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.id}`)}>Profile</Button>,
+  //   [history]
+  // );
 
   const tableColumns = [
     { title: "Id", field: "id", editable:"never" },
     { title: "Name", field: "name" },
     { title: "Email", field: "email" },
-    { title: "Role", field: "role", lookup: { Admin:"Admin", Volunteer:"Volunteer", Panel:"Panel"} },
+    { title: "Role", field: "role", lookup: { admin:"Admin", Volunteer:"Volunteer", Panel:"Panel"} },
     { title: "Contact Number", field: "contactNo" },
   ];
 

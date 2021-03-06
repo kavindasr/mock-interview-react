@@ -73,9 +73,9 @@ export const auth = (email, password) => (dispatch) => {
 			localStorage.setItem('user', response.data.panelID);
 			localStorage.setItem('expirationDate', expirationDate);
 			let socket = initialize();
-			if (response.data.type.toLowerCase() == 'admin') {
+			if (response.data.type.toLowerCase() === 'admin') {
 				socket.emit('subscribe', 'admin','name');
-			} else if (response.data.type.toLowerCase() == 'volunteer') {
+			} else if (response.data.type.toLowerCase() ==='volunteer') {
 				console.log(response.data.panelID);
 				socket.emit('subscribe', 'volunteer',response.data.panelID);
 			} else {

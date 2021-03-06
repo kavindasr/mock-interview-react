@@ -10,14 +10,15 @@ const useStyles = makeStyles({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    height: props => props.customHeight ? props.customHeight : "50%",
+    height: props => props.customHeight ? props.customHeight : "70%",
+    width: props => props.customWidth ? props.customWidth : "70%",
     // overflow: "scroll"
   },
 });
 
 const FHModal = ((props) => {
-    const { customHeight, open, handleClose, body} = props;
-    const classes = useStyles({ customHeight });
+    const {customWidth, customHeight, open, handleClose, body} = props;
+    const classes = useStyles({ customHeight,customWidth });
 
     return (
         <Modal

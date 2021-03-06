@@ -1,14 +1,11 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import Axios from 'axios';
-import Image from 'cloudinary-react';
 
 import {getAllInterviewee, deleteInterviewee, updateInterviewee, saveInterviewee } from "../../api/IntervieweeAPI"
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
-import { Button } from "@material-ui/core";
 import {getSocket} from '../../services/socket';
 
 const CompanyTable = "Interviewee Table";
@@ -19,7 +16,6 @@ const tableOptions = {
 };
 
 const Companies = props => {
-  let history = useHistory();
 
   const [companies, setComanies ] = useState([]);
   const [imageUrl,setimageUrl] =useState("");
@@ -111,7 +107,7 @@ const Companies = props => {
               })
       });
     },
-    [addAlert, companies]
+    [addAlert, companies, imageUrl]
   );
 
   const saveCompany = useCallback(
@@ -169,13 +165,13 @@ const Companies = props => {
       // xhr.send(formdata);
       // const imageResponse = JSON.parse(xhr.responseText);
     })
-  });
+  },[imageUrl]);
   
-  const renderCVBtn = useCallback(
-    (rowData) => {
-      <input type="file"/>
-    },[]
-  );
+  // const renderCVBtn = useCallback(
+  //   (rowData) => {
+  //     <input type="file"/>
+  //   },[]
+  // );
 
   const renderImgBtn = useCallback(
     (rowData) => 
@@ -188,7 +184,7 @@ const Companies = props => {
         />
         {/* <button onClick={() => uploadImage(imageSelected)}>Upload Images</button> */}
       </div>,
-     []
+     [uploadImage]
   );
 
   const tableColumns = [

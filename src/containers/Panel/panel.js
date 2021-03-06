@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 import {
@@ -14,8 +13,6 @@ import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from "../../store/actions/index";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Twitter, YouTube } from "@material-ui/icons";
-import { Facebook } from "@material-ui/icons";
 
 import Navbar from "../../components/UI/Navbar/Navbar";
 import {getSocket} from '../../services/socket';
@@ -41,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Users = (props) => {
-  let history = useHistory();
   const classes = useStyles();
   const [participants, setParticipants] = useState([]);
 
@@ -57,7 +53,7 @@ const Users = (props) => {
         setParticipants(response.data);
       }
     });
-  }, []);
+  }, [props.userId]);
 
   useEffect(() => {
 		let socket = getSocket();
@@ -145,39 +141,40 @@ const Users = (props) => {
           setIsModalOpen(true);
         }}
       >
-        Profile
+        Add Feedback
       </Button>
     ),
-    [history,props]
+    []
   );
+
+  // const renderProfileBtn = useCallback(
+  //   (rowData) => (
+  //     <Button
+  //       color="primary"
+  //       onClick={() => {
+  //         setCurentUser(rowData.interviewID)
+  //         setIsEdit(false);
+  //         setIsModalOpen(true);
+  //       }}
+  //     >
+  //       Profile
+  //     </Button>
+  //   ),
+  //   []
+  // );
 
   const renderCVBtn = useCallback(
     (rowData) => (
-      <Button
-        color="primary"
-        onClick={() => {
-          setCurentUser(rowData.interviewID)
-          setIsEdit(false);
-          setIsModalOpen(true);
-        }}
-      >
-        Profile
-      </Button>
-    ),
-    [history,props]
-  );
-
-  const renderProfileBtn = useCallback(
-    (rowData) => (
       <Link href={rowData.cv} target="_blank" >
-                Join Meeting
+            {rowData.cv}
       </Link>
     ),
-    [history,props]
+    []
   );
 
   const tableColumns = [
-    { title: "Interview ID", field: "interviewID", editable: "never" },
+    { title: 'Interviewee', field: 'intervieweeImg', render: rowData => <img src={rowData.intervieweeImg} alt="ieee" style={{width: 40, borderRadius: '50%'}}/> },
+    { title: "Interview ID", field: "interviewID", editable: "never", width: "10%" },
     { title: "Name", field: "name", editable: "never" },
     {
       title: "State",
@@ -190,8 +187,8 @@ const Users = (props) => {
       lookup: { true: "Available", false: "Not-Available" },
       editable: "never",
     },
-    { title: "Profile", render: renderProfileBtn },
-    { title: "Profile", render: renderCVBtn },
+    // { title: "Profile", render: renderProfileBtn },
+    { title: "View CV", render: renderCVBtn },
     { title: "Profile", render: renderFeedbackBtn },
   ];
 
@@ -218,6 +215,7 @@ const Users = (props) => {
           />
         </div>
         <FHModal
+          customWidth="60%"
           body={
             <UserProfile
               data={currentUser}

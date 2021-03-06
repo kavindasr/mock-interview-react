@@ -26,7 +26,7 @@ export const addItemToArray = (array, item) => {
 export const addItemRemoveDuplicate = (idtype, array, newarr) => {
 	let result = [];
 	newarr.forEach((item) => {
-		let index = array.findIndex((entry) => entry[idtype] == item[idtype]);
+		let index = array.findIndex((entry) => entry[idtype] === item[idtype]);
 		if (index < 0) {
 			result.push(item);
 		}

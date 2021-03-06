@@ -133,7 +133,7 @@ function Dashboard(props) {
   };
   // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const { onauthLogout, isAuthenticated } = props;
+  const { onauthLogout } = props;
 
     const handleLogout = () => {
 		onauthLogout();

@@ -1,5 +1,6 @@
-import React, { Suspense }  from 'react';
+import React, { Suspense, useEffect }  from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { connect } from "react-redux";
 
 import SignIn from '../src/containers/Auth/auth';
 import Companies from '../src/components/Pages/Admin/companies';
@@ -11,14 +12,20 @@ import Intervieweebasic from '../src/components/Pages/Admin/interviewee';
 import VolunteerProfile from '../src/containers/Panel/UserProfile';
 import UploadFiles from '../src/containers/Admin/Uploadfile';
 import ContactVolunteers from '../src/containers/Panel/ContactVolunteer';
-import IntervieweeList from '../src/containers/Volunteers/IntervieweeList'
+import IntervieweeList from '../src/containers/Volunteers/IntervieweeList';
 
-
+import * as actions from "./store/actions/index";
 import * as routez from './shared/routes';
 
 import './App.css';
 
-function App() {
+function App(props) {
+
+  const onTryAutoSignIn = props.onTryAutoSignIn;
+
+  useEffect(() => {
+    onTryAutoSignIn();
+  }, [onTryAutoSignIn]);
 
   let routes = (
     <Suspense >
@@ -47,4 +54,21 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.token !== null,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTryAutoSignIn: () => dispatch(actions.authCheckState()),
+  };
+};
+
+// const withErrorhandlerWrappedComponent = withErrorHandler(App, axios);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

@@ -5,17 +5,16 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-import * as routez from "../../../shared/routes";
 import { authLogout, removeAlert } from "../../../store/actions/index";
-import Alert from "../../../components/UI/FHAlert/FHAlert";
+import { Button } from '@material-ui/core';
 
 function Navbar(props) {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const history = useHistory();
 
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
+  // const handleClick = () => setClick(!click);
+  // const closeMobileMenu = () => setClick(false);
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -25,8 +24,7 @@ function Navbar(props) {
     }
   };
 
-  const { onauthLogout, isAuthenticated,companyName, link } = props;
-
+  const { onauthLogout,companyName } = props;
 
   const handleLogout = () => {
     onauthLogout();
@@ -59,9 +57,9 @@ function Navbar(props) {
               </Link>
             </li>
             <li className='nav-item'>
-              <Link href='http://www.google.com' className='nav-links' target="_blank" >
+              <Button href='http://www.google.com' className='nav-links' target="_blank" >
                 Join Meeting
-              </Link>
+              </Button>
             </li>
             <li className='nav-item'>
               <Link

@@ -1,12 +1,10 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 
 import {getAllPanels, deletePanels, updatePanels, savePanels } from "../../api/PanelAPI"
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
-import { Button } from "@material-ui/core";
 import {getSocket} from '../../services/socket';
 
 const CompanyTable = "Panel Table";
@@ -17,7 +15,6 @@ const tableOptions = {
 };
 
 const Companies = props => {
-  let history = useHistory();
 
   const [companies, setComanies ] = useState([]);
   useEffect(() => {
@@ -136,10 +133,10 @@ const Companies = props => {
     [addAlert, companies]
   );
   
-  const renderProfileBtn = useCallback(
-    (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.officerID}`)}>Profile</Button>,
-    [history]
-  );
+  // const renderProfileBtn = useCallback(
+  //   (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.officerID}`)}>Profile</Button>,
+  //   [history]
+  // );
 
   const tableColumns = [
     { title: "Panel Id", field: "panelID" },

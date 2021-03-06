@@ -1,12 +1,10 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 
 import {getAllParticipants, updateParticipants, saveInterviewees } from "../../api/VolunteerInterviewsAPI"
 import {replaceItemInArray, addItemToArray, removeItemFromArray, updateItemInArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
-import { Button } from "@material-ui/core";
 import {getSocket} from '../../services/socket';
 import Navbar from "../../components/UI/Navbar/NavbarVolun";
 
@@ -18,7 +16,6 @@ const tableOptions = {
 };
 
 const Users = props => {
-  let history = useHistory();
 
   const [participants, setParticipants] = useState([]);
   useEffect(() => {
@@ -126,10 +123,10 @@ const Users = props => {
     [addAlert, participants, props]
   );
   
-  const renderProfileBtn = useCallback(
-    (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.id}`)}>Profile</Button>,
-    [history]
-  );
+  // const renderProfileBtn = useCallback(
+  //   (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.id}`)}>Profile</Button>,
+  //   [history]
+  // );
 
   const tableColumns = [
     { title: "Interviewee ID", field: "intervieweeID" },

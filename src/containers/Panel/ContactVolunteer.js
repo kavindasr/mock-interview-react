@@ -1,6 +1,5 @@
 import React, {useEffect,useState} from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
 
 import {
   ContactVolunteer,
@@ -8,17 +7,10 @@ import {
 import * as actions from "../../store/actions/index";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
-import GridItem from "../../components/UI/Grid/GridItem";
-import GridContainer from "../../components/UI/Grid/GridContainer";
-import CustomInput from "../../components/UI/CustomInput/CustomInput";
 import Button from "../../components/UI/CustomButtons/Button";
 import Card from "../../components/UI/Card/Card";
-import CardHeader from "../../components/UI/Card/CardHeader";
-import CardAvatar from "../../components/UI/Card/CardAvatar";
 import CardBody from "../../components/UI/Card/CardBody";
-import CardFooter from "../../components/UI/Card/CardFooter";
 import Navbar from "../../components/UI/Navbar/Navbar";
 
 
