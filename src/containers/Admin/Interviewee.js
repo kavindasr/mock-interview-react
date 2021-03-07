@@ -178,9 +178,7 @@ const Companies = props => {
       <div>
         <input 
           type="file"
-          onChange = {(event) => {
-            uploadImage(event.target.files);
-          }}
+          onChange = {(event) => uploadImage(event.target.files)}
         />
         {/* <button onClick={() => uploadImage(imageSelected)}>Upload Images</button> */}
       </div>,
@@ -189,14 +187,14 @@ const Companies = props => {
 
   const tableColumns = [
     { title: "Interviewee Id", field: "intervieweeID", editable:"never" },
-    { title: "Name", field: "name" },
-    { title: "Department", field: "dept" },
-    { title: "Email", field: "email" },
-    { title: "Contact Number", field: "contactNo" },
+    { title: "Name", field: "name", validate: rowData => rowData.name === '' ? { isValid: false, helperText: 'Name cannot be empty' } : true, },
+    { title: "Department", field: "dept", validate: rowData => rowData.dept === '' ? { isValid: false, helperText: 'Department cannot be empty' } : true, },
+    { title: "Email", field: "email", validate: rowData => rowData.email === '' ? { isValid: false, helperText: 'Email cannot be empty' } : true, },
+    { title: "Contact Number", field: "contactNo", validate: rowData => rowData.contactNo === '' ? { isValid: false, helperText: 'Contact Number cannot be empty' } : true, },
     { title: "CV", field: "cv"},
     // { title: "Upload CV", render: renderCVBtn },
-    { title: "Image", field: "intervieweeImg" ,  editable:"never"},
     { title: "Upload Image", render: renderImgBtn },
+    { title: "Image", field: "intervieweeImg" ,  editable:"never"},
   ];
 
   if (false) {

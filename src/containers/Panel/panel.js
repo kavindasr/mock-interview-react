@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { Link } from 'react-router-dom';
 
 import {
   getAllParticipants,
@@ -165,9 +164,9 @@ const Users = (props) => {
 
   const renderCVBtn = useCallback(
     (rowData) => (
-      <Link href={rowData.cv} target="_blank" >
-            {rowData.cv}
-      </Link>
+      <Button href={rowData.cv} className='nav-links' target="_blank" color="primary" >
+        View CV
+      </Button>
     ),
     []
   );
@@ -199,7 +198,7 @@ const Users = (props) => {
     return (
       <div className={classes.root}>
         
-        <Navbar companyName="ABC Company" link="uom.lk"/>
+        <Navbar/>
 
         <div className={classes.paper}>
           <Table
