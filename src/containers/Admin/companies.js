@@ -84,8 +84,13 @@ const Companies = (props) => {
 
 	const updateCompany = useCallback(
 		(newCompanies, oldCompanies) => {
+			var data = {
+				companyName: newCompanies.companyName,
+				email: newCompanies.email,
+				contactNo: newCompanies.contactNo,
+			};
 			return new Promise((resolve, reject) => {
-				updateCompanies(oldCompanies.companyID, newCompanies).then((response) => {
+				updateCompanies(oldCompanies.companyID, data).then((response) => {
 					if (!response.error) {
 						addAlert({
 							message: 'Company Updated Successfully!',
@@ -106,7 +111,6 @@ const Companies = (props) => {
 	const saveCompany = useCallback(
 		(newCompanies) => {
 			var data = {
-				companyID: newCompanies.companyID,
 				companyName: newCompanies.companyName,
 				email: newCompanies.email,
 				contactNo: newCompanies.contactNo,
@@ -141,9 +145,9 @@ const Companies = (props) => {
 
 	const tableColumns = [
 		{ title: 'Company Id', field: 'companyID', editable: 'never' },
-		{ title: 'Name', field: 'companyName' },
-		{ title: 'Email', field: 'email' },
-		{ title: 'Contact Number', field: 'contactNo' },
+		{ title: 'Name', field: 'companyName', validate: rowData => rowData.companyName === '' ? { isValid: false, helperText: 'Name cannot be empty' } : true,},
+		{ title: 'Email', field: 'email', validate: rowData => rowData.email === '' ? { isValid: false, helperText: 'Email cannot be empty' } : true,	},
+		{ title: 'Contact Number', field: 'contactNo', validate: rowData => rowData.contactNo === '' ? { isValid: false, helperText: 'Contact Number cannot be empty' } : true,	},
 	];
 
 	if (false) {

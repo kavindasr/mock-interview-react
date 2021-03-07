@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useEffect}  from 'react';
+import React, { useState, useCallback}  from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -11,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import FormLabel from "@material-ui/core/FormLabel";
 
 import { checkValidity } from '../../shared/validate';
 import { updateObject } from '../../shared/utility';
@@ -18,7 +18,7 @@ import { buildTextFields } from '../../helpers/uiHelpers';
 import { auth } from '../../store/actions/index';
 import { addAlert } from '../../store/actions/index';
 import * as routez from '../../shared/routes';
-
+import backImg from "../../helpers/images/rum.png";
 
 const inputDefinitions = {
     gmail: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(http://res.cloudinary.com/isuruieee/image/upload/v1614371135/pexic7ujvhspeif0hvb4.png)',
+        backgroundImage: `url(${backImg})`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -81,7 +81,6 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn(props) {
     const classes = useStyles();
-    let history = useHistory();
 
     const [inputIsValid, setInputIsValid] = useState({
         gmail: true,
@@ -99,6 +98,21 @@ function SignIn(props) {
         },
         password: {
             styleClass: classes.loginInput
+        }
+    };
+
+    const parseErrorMessage = (errorMessage) => {
+        switch (errorMessage) {
+            case "User doesn't exist":
+                return "Hmm... We couldn't find an account for this email";
+            case "Invalid username/password supplied":
+                return "Hmm... Seems like the username/password is wrong.";
+            case "Invalid Username or Password":
+                return "Hmm... Seems like the username/password is wrong.";
+            case "Server is under maintainance. Try again shortly.":
+                return "Server is under maintainance. Try again shortly.";
+            default:
+                return null;
         }
     };
 
@@ -135,22 +149,13 @@ function SignIn(props) {
         }
     }, [authObj, checkInputValidity, inputIsValid, props]);
 
-    const authError = props.error;
-    useEffect(() => {
-        if (authError) {
-            alert(authError)
-        }
-    }, [authError,history]);
+    // const authError = props.error;
+    // useEffect(() => {
+    //     if (authError) {
+    //         alert(authError)
+    //     }
+    // }, [authError,history]);
 
-    if (props.isAuthenticated){
-        if(props.usertype.toUpperCase()==="ADMIN" ){
-            history.push(routez.COMPANIES);
-        }else if(props.usertype.toUpperCase()==="PANEL" ){
-            history.push(routez.INTERVIEPANNEL);
-        }else if(props.usertype.toUpperCase()==="VOLUNTEER" ){
-            history.push(routez.INTERVIEWEE);
-        }
-    }
     let authRedirect = null;
     if (props.isAuthenticated) {
         if(props.usertype.toUpperCase()==="ADMIN" ){
@@ -162,6 +167,15 @@ function SignIn(props) {
         }
         
     }
+
+    let errorMessage = null;
+	if (props.error) {
+		errorMessage = (
+			<div className={classes.errorLabel}>
+				<FormLabel error={true}>{parseErrorMessage(props.error)}</FormLabel>
+			</div>
+		);
+	}
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -176,6 +190,7 @@ function SignIn(props) {
                     Sign in
                 </Typography>
                 <form noValidate autoComplete="off" className={classes.form} onSubmit={onSubmitHandler}>
+                    {errorMessage}
                     {inputFields}
                     <Button
                         type="submit"

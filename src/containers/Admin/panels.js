@@ -1,11 +1,15 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
 
+import { Button } from "@material-ui/core";
+
 import {getAllPanels, deletePanels, updatePanels, savePanels } from "../../api/PanelAPI"
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
 import {getSocket} from '../../services/socket';
+import FHModal from "../../components/UI/FHModal/FHModal";
+import ChangePassword from "../../containers/Admin/ChangePassword"
 
 const CompanyTable = "Panel Table";
 
@@ -17,6 +21,11 @@ const tableOptions = {
 const Companies = props => {
 
   const [companies, setComanies ] = useState([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentUser, setCurentUser] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
+
   useEffect(() => {
     getAllPanels()
         .then((response) => {
@@ -145,35 +154,67 @@ const Companies = props => {
     [addAlert, companies]
   );
   
-  // const renderProfileBtn = useCallback(
-  //   (rowData) => <Button color="primary" onClick={() => history.push(`users/${rowData.officerID}`)}>Profile</Button>,
-  //   [history]
-  // );
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const renderPswdChange = useCallback(
+    (rowData) => (
+      <Button
+        color="primary"
+        onClick={() => {
+          setCurentUser(rowData.panelID)
+          setIsEdit(false);
+          setIsModalOpen(true);
+        }}
+      >
+        Change Password
+      </Button>
+    ),
+    []
+  );
 
   const tableColumns = [
     { title: "Panel Id", field: "panelID" },
-    { title: "Company Id", field: "companyID" },
-    { title: "Name", field: "name" },
-    { title: "Email", field: "email" },
-    { title: "Volunteer Id", field: "volunteerID" },
-    { title: "Link", field: "link" },
-    { title: "Contact Number", field: "contactNo" },
+    { title: "Company Id", field: "companyID", validate: rowData => rowData.companyID === '' ? { isValid: false, helperText: 'Company ID cannot be empty' } : true, },
+    { title: "Name", field: "name", validate: rowData => rowData.name === '' ? { isValid: false, helperText: 'Name cannot be empty' } : true, },
+    { title: "Email", field: "email", validate: rowData => rowData.email === '' ? { isValid: false, helperText: 'Email cannot be empty' } : true, },
+    { title: "Volunteer Id", field: "volunteerID", validate: rowData => rowData.volunteerID === '' ? { isValid: false, helperText: 'Volunteer ID cannot be empty' } : true, },
+    { title: "Link", field: "link", validate: rowData => rowData.link === '' ? { isValid: false, helperText: 'Link cannot be empty' } : true, },
+    { title: "Contact Number", field: "contactNo", validate: rowData => rowData.contactNo=== '' ? { isValid: false, helperText: 'Contact Number cannot be empty' } : true, },
+    { title: "Settings", render: renderPswdChange },
   ];
 
   if (false) {
     //return <Spinner />
   } else {
-    return <Table
-      data={companies}
-      title={CompanyTable}
-      columns={tableColumns}
-      tableOptions={tableOptions}
-      editable={{
-        onRowAdd: newData =>saveCompany(newData),
-        onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
-        onRowDelete: oldData => deleteCompany(oldData),
-      }}
-    />
+    return (
+      <div>
+        <Table
+          data={companies}
+          title={CompanyTable}
+          columns={tableColumns}
+          tableOptions={tableOptions}
+          editable={{
+            onRowAdd: newData =>saveCompany(newData),
+            onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
+            onRowDelete: oldData => deleteCompany(oldData),
+          }}
+        />
+        <FHModal
+            customWidth="60%"
+            body={
+              <ChangePassword
+                data={currentUser}
+                isEdit={isEdit}
+                setIsModalOpen={setIsModalOpen}
+              />
+          }
+          open={isModalOpen}
+          handleClose={handleModalClose}
+        />
+      </div>
+    )
   }
 };
 
