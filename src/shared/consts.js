@@ -1,5 +1,5 @@
 // General Const
-const IEEEMGtool = 'http://ieee-mock.us-east-2.elasticbeanstalk.com/';
+const IEEEMGtool = 'https://api.riseupmora.com/';
 // const IEEEMGtool = 'http://localhost:9000/';
 export const SEHost = IEEEMGtool;
 
