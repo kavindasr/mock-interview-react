@@ -12,6 +12,8 @@ const useStyles = makeStyles({
     transform: "translate(-50%, -50%)",
     height: props => props.customHeight ? props.customHeight : "70%",
     width: props => props.customWidth ? props.customWidth : "70%",
+    display:"flex",
+    overflow: "scroll",
     // overflow: "scroll"
   },
 });

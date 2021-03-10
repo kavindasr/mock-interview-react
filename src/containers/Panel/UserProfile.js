@@ -21,7 +21,8 @@ import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles((theme) => ({
   root:{
     width:"100%",
-    overFlow: "scroll"
+    overFlow: "scroll",
+    backgroundColor: "rgb(186, 192, 192)"
   },
   // card: {
   //   padding: theme.spacing(2),
@@ -35,6 +36,19 @@ const useStyles = makeStyles((theme) => ({
     alignContent: 'center',
     justifyContent: 'center',
     justifyItems: 'center'
+  },
+  card:{
+    backgroundColor: "rgb(186, 192, 192)",
+  },
+  cardName:{
+    color: "black",
+    fontSize : "30px",
+  },
+  cardemail:{
+    color: "black"
+  },
+  cardnumber:{
+    color: "black"
   },
 }));
 
@@ -57,7 +71,7 @@ const UserProfile = (props) =>{
 
   return (
       <div className={classes.root}>
-        <Card profile  >
+        <Card profile  className={classes.card}>
               {/* <CardAvatar profile>
                   <Image cloudName="isuruieee" publicId={participant.intervieweeImg} width="100%" height="100%" />
                 <img src={cloudinaryCore.url(participant.intervieweeImg)} />
@@ -70,9 +84,9 @@ const UserProfile = (props) =>{
                 <Image cloudName="isuruieee" publicId={participant.intervieweeImg} width="20%" height="20%" />
                 </CardMedia>
               <CardBody profile>
-                <h4 className={classes.cardTitle}>{participant.name}</h4>
-                <h4 className={classes.cardTitle}>{participant.email}</h4>
-                <h4 className={classes.cardTitle}>{participant.contactNo}</h4>
+                <h4 className={classes.cardName}>{participant.name}</h4>
+                <h4 className={classes.cardemail}>Email : {participant.email}</h4>
+                <h4 className={classes.cardnumber}>Contact Number : {participant.contactNo}</h4>
                 <TextField
                   id="outlined-multiline-static"
                   label="Feedback"
@@ -80,7 +94,7 @@ const UserProfile = (props) =>{
                   variant="outlined"
                   fullWidth
                 />
-                <Button color="primary" round>
+                <Button color="rgb(140, 217, 223)" round>
                   Add Feedback
                 </Button>
               </CardBody>
