@@ -12,6 +12,7 @@ import Intervieweebasic from '../src/components/Pages/Admin/interviewee';
 import VolunteerProfile from '../src/containers/Panel/UserProfile';
 import UploadFiles from '../src/containers/Admin/Uploadfile';
 import ContactVolunteers from '../src/containers/Panel/ContactVolunteer';
+import ContactPanel from '../src/containers/Volunteers/ContactPanel';
 import IntervieweeList from '../src/containers/Volunteers/IntervieweeList';
 
 import * as actions from "./store/actions/index";
@@ -40,6 +41,7 @@ function App(props) {
         <Route exact path={routez.INTERVIEWEEBASIC} component={Intervieweebasic}/>
         <Route exact path={routez.VOLUNTEERPROFILE} component={VolunteerProfile}/>
         <Route exact path={routez.UPLOADFILES} component={UploadFiles}/>
+        <Route exact path={routez.CONTACTPANEL} component={ContactPanel}/>
         <Route exact path={routez.SIGNIN} component={SignIn}/>
         <Redirect path="/" to={routez.SIGNIN} />
       </Switch>

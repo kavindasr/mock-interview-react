@@ -73,9 +73,9 @@ function Navbar(props) {
               </Link>
             </li>
             <li className='nav-item'>
-              <a href={panel.link} className='nav-links-button' target="_blank" >
-                Join Meeting
-              </a>
+              <Link to='/contactpanel' className='nav-links'>
+                Contact Pannel
+              </Link>
             </li>
             {/* <li className='nav-item'>
               <Link

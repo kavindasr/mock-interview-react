@@ -2,7 +2,7 @@ import React, {useEffect,useState, useCallback} from "react";
 import { connect } from "react-redux";
 
 import {
-  ContactVolunteer,
+    getUser,
 } from "../../api/PanelAPI";
 import {needHelp} from "../../api/OtherApi"
 import * as actions from "../../store/actions/index";
@@ -12,9 +12,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "../../components/UI/CustomButtons/Button";
 import Card from "../../components/UI/Card/Card";
 import CardBody from "../../components/UI/Card/CardBody";
-import Navbar from "../../components/UI/Navbar/Navbar";
+import Navbar from "../../components/UI/Navbar/NavbarVolun";
 import { removeAlert } from "../../store/actions/index";
 import Alert from '../../components/UI/FHAlert/FHAlert';
+import Switch from '@material-ui/core/Switch';
 
 // import avatar from "assets/img/faces/marc.jpg";
 
@@ -35,14 +36,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = (props) => {
+const ContactPanel = (props) => {
   const classes = useStyles();
 
   const { addAlert } = props;
 
   const [participants, setParticipants] = useState([]);
   useEffect(() => {
-    ContactVolunteer(props.userId).then((response) => {
+    getUser(props.userId).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
         console.log(response);
@@ -59,7 +60,7 @@ const UserProfile = (props) => {
   const askforVolunteer = useCallback(
     () => {
       let data ={
-        "needHelp" : true,
+        "needHelp" : false,
       }
       needHelp(props.userId,data)
         .then((response) => {
@@ -72,6 +73,18 @@ const UserProfile = (props) => {
       })
     },
     [addAlert,props.userId]
+  );
+
+  const showneedHelp = useCallback(
+    (participants) => (
+      <Switch
+        checked={participants.needHelp || ''}
+        onClick={() => askforVolunteer()}
+        name="checkedB"
+        color="primary"
+      />
+    ),
+    [askforVolunteer]
   );
 
   return (
@@ -90,12 +103,15 @@ const UserProfile = (props) => {
                 <h4 className={classes.cardTitle}>{participants.email}</h4>
                 <h4 className={classes.cardTitle}>{participants.contactNo}</h4>
                 <p className={classes.description}>
-                  If you need to contact volunteer click ask for volunteer button. 
-                  Volunteer will enter to your zoom breakout room. If there's a emergency 
+                  If you need to contact Panel member click Join Zoom Button. 
+                  If there's a emergency 
                   need try to contact him through the mobile number
                 </p>
-                <Button color="success" round onClick={() => askforVolunteer()}>
-                  Ask for Vounteer
+                <div>
+                    {showneedHelp(participants)}
+                </div>
+                <Button color="success" round href={participants.link} target="_blank" >
+                    Join Zoom Button
                 </Button>
               </CardBody>
             </Card>
@@ -119,4 +135,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactPanel);

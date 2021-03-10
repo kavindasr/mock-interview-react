@@ -67,7 +67,7 @@ function Navbar(props) {
               </Link>
             </li>
             <li className='nav-item'>
-              <a href={panel.link} className='nav-links-button' target="_blank" >
+              <a href={panel.link} className='nav-links-button' target="_blank" rel="noreferrer">
                 Join Meeting
               </a>
             </li>

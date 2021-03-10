@@ -1,7 +1,9 @@
-import React, {useEffect,useState} from "react";
+import React, {useEffect,useState, useCallback} from "react";
+import { connect } from 'react-redux';
 
 import {
   getInterviewee,
+  addFeedback,
 } from "../../api/InterviewsAPI";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,6 +16,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 // const cloudinaryCore = new cloudinary.Cloudinary({cloud_name: 'isuruieee'});
 import {Image} from 'cloudinary-react';
 import TextField from '@material-ui/core/TextField';
+import * as actions from '../../store/actions/index';
 
 
 // import avatar from "assets/img/faces/marc.jpg";
@@ -50,11 +53,16 @@ const useStyles = makeStyles((theme) => ({
   cardnumber:{
     color: "black"
   },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+},
 }));
 
 const UserProfile = (props) =>{
   const classes = useStyles();
   const { data } = props;
+  const { addAlert } = props;
 
   const [participant, setParticipant] = useState([]);
   useEffect(() => {
@@ -67,7 +75,26 @@ const UserProfile = (props) =>{
     });
   }, [data]);
 
-  console.log(participant)
+  const [value, setValue] = React.useState('');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onSubmitHandler = useCallback((event) => {
+    event.preventDefault()
+
+      addFeedback(value)
+        .then((response) => {
+            if (!response.error) {
+                addAlert({
+                    message: "Feedback Send Successfully!",
+                });
+            }
+        })
+
+    
+  }, [value,  addAlert]);
 
   return (
       <div className={classes.root}>
@@ -87,20 +114,30 @@ const UserProfile = (props) =>{
                 <h4 className={classes.cardName}>{participant.name}</h4>
                 <h4 className={classes.cardemail}>Email : {participant.email}</h4>
                 <h4 className={classes.cardnumber}>Contact Number : {participant.contactNo}</h4>
-                <TextField
-                  id="outlined-multiline-static"
-                  label="Feedback"
-                  multiline
-                  variant="outlined"
-                  fullWidth
-                />
-                <Button color="rgb(140, 217, 223)" round>
-                  Add Feedback
-                </Button>
+                <form noValidate autoComplete="off" className={classes.form} onSubmit={onSubmitHandler}>
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Feedback"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    value={value}
+                    onChange={handleChange}
+                  />
+                  <Button color="info" round type="submit">
+                    Add Feedback
+                  </Button>
+                </form>
               </CardBody>
             </Card>
       </div>
   );
 }
 
-export default UserProfile;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addAlert: alert => dispatch(actions.addAlert(alert))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(UserProfile);

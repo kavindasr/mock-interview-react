@@ -12,4 +12,4 @@ export const savePanels = (data) => postRequest(`${BASE_URL}`,data);
 
 export const getUser = (id) => getRequest(`${BASE_URL}/${id}`);
 
-export const ContactVolunteer = (id) => getRequest(`/users/${id}`);
+export const ContactVolunteer = (id) => getRequest(`/users/volunteer/${id}`);

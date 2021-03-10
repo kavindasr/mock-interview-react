@@ -1,6 +1,6 @@
 // General Const
-const IEEEMGtool = 'https://api.riseupmora.com/';
-// const IEEEMGtool = 'http://localhost:9000/';
+// const IEEEMGtool = 'https://api.riseupmora.com/';
+const IEEEMGtool = 'http://localhost:9000/';
 export const SEHost = IEEEMGtool;
 
 // Auth Const

@@ -15,3 +15,5 @@ export const saveInterviews = (data) => postRequest(`${BASE_URL}`,data);
 export const getUser = (id) => getRequest(`${BASE_URL}/${id}`);
 
 export const changePassword = (data,id) => postRequest(`${BASE_URL}/changePassword/${id}`,data);
+
+export const addFeedback = (data) => postRequest(`interview/feedback`,data);

@@ -118,6 +118,7 @@ const Users = (props) => {
           }
           addAlert({
             message: "Failed!",
+            severity:"error",
           });
           return reject();
         });
@@ -172,7 +173,7 @@ const Users = (props) => {
   );
 
   const tableColumns = [
-    { title: 'Interviewee', field: 'intervieweeImg', render: rowData => <img src={rowData.intervieweeImg} alt="ieee" style={{width: 40, borderRadius: '50%'}}/> },
+    { title: 'Interviewee', field: 'intervieweeImg',editable: "never" , render: rowData => <img src={rowData.intervieweeImg} alt="ieee" style={{width: 40, borderRadius: '50%'}}/> },
     { title: "Interview ID", field: "interviewID", editable: "never", width: "10%" },
     { title: "Name", field: "name", editable: "never" },
     {

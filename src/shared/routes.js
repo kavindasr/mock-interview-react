@@ -8,4 +8,5 @@ export const INTERVIEWEEBASIC = '/interviewee'
 export const VOLUNTEERPROFILE = '/intervieweeprofile/:id'
 export const UPLOADFILES = "/upload"
 export const CONTACTVOLUNTEER = "/contactvolunteer"
+export const CONTACTPANEL = "/contactpanel"
 export const INTERVIEWEELIST = "/intervieweelist"
