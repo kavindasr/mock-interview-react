@@ -54,9 +54,7 @@ function Navbar(props) {
     <>
       <nav className='navbar'>
         <div className='navbar-container'>
-          {/* <Link to='/' className='navbar-logo' >
-            <img src="uom.png"/>
-          </Link> */}
+            {/* <img src="http://res.cloudinary.com/isuruieee/image/upload/v1615335946/pghlhnpejcvtozbv7li4.jpg" alt="IEEE" width="5%" height="30%"/> */}
           <p className="company">{panel.companyName}</p>
           <div className='menu-icon'>
             <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
