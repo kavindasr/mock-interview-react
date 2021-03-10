@@ -48,7 +48,6 @@ const Users = (props) => {
     getAllParticipants(props.userId).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
-        console.log(response);
         setParticipants(response.data);
       }
     });
@@ -57,8 +56,6 @@ const Users = (props) => {
   useEffect(() => {
 		let socket = getSocket();
 		socket.on('interview', (method, data) => {
-      console.log(method);
-			console.log(data);
 			switch (method) {
 				case 'post':
 					setParticipants(addItemToArray(participants, data));
@@ -67,7 +64,6 @@ const Users = (props) => {
 					setParticipants(replaceItemInArray(participants, 'interviewID', data, data.interviewID));
 					break;
 				case 'delete':
-					console.log(data.id);
 					setParticipants(removeItemFromArray(participants, 'interviewID', parseInt(data.id)));
 					break;
 				default:
@@ -76,14 +72,11 @@ const Users = (props) => {
 			}
 		});
     socket.on('interviewee', (method, data) => {
-      console.log(method);
-			console.log(data);
 			switch (method) {
 				case 'put':
 					setParticipants(updateItemInArray(participants, 'intervieweeID', data));
 					break;
 				case 'delete':
-					console.log(data.id);
 					setParticipants(removeItemFromArray(participants, 'intervieweeID', parseInt(data.id)));
 					break;
 				default:
@@ -95,8 +88,6 @@ const Users = (props) => {
 	}, [participants]);
   const { addAlert } = props;
   // const [isLoading, setIsLoading] = useState(true);
-
-  console.log(props.userId);
 
   const updateInterviee = useCallback(
     (newUser, oldUser) => {

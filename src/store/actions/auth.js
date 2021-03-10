@@ -15,7 +15,6 @@ const authSuccess = (token, type, userId) => {
 		request.headers.Authorization = `Bearer ${token}`;
 		return request;
 	});
-	console.log(userId);
 	return {
 		type: actionTypes.AUTH_SUCCESS,
 		idToken: token,
@@ -25,7 +24,6 @@ const authSuccess = (token, type, userId) => {
 };
 
 const authFail = (error) => {
-    console.log("hiii")
 	return {
 		type: actionTypes.AUTH_FAIL,
         error: error
@@ -45,7 +43,8 @@ export const authLogout = () => {
 
 const checkAuthTimeout = (expirationTime) => (dispatch) => {
 	setTimeout(() => {
-		dispatch(authLogout());
+		// dispatch(authLogout());
+		console.log("log again")
     }, expirationTime * 1000)
 };
 
@@ -60,23 +59,16 @@ export const auth = (email, password) => (dispatch) => {
     axios.post(url,
         authData)
         .then((response) => {
-            console.log(response)
-            console.log(response.data)
-            console.log(response.data.success)
 		if (response.data.success) {
-			console.log(response);
 			const expirationDate = new Date(new Date().getTime() + authRequestTimeoutSec * 1000);
-			console.log(response.data.type);
 			localStorage.setItem('token', response.data.token);
 			localStorage.setItem('usertype', response.data.type);
-			console.log(response.data.panelID);
 			localStorage.setItem('user', response.data.panelID);
 			localStorage.setItem('expirationDate', expirationDate);
 			let socket = initialize();
 			if (response.data.type.toLowerCase() === 'admin') {
 				socket.emit('subscribe', 'admin','name');
 			} else if (response.data.type.toLowerCase() ==='volunteer') {
-				console.log(response.data.panelID);
 				socket.emit('subscribe', 'volunteer',response.data.panelID);
 			} else {
 				socket.emit('subscribe', 'panel', response.data.panelID);
@@ -103,7 +95,6 @@ export const authCheckState = () => (dispatch) => {
 		} else {
 			const usertype = localStorage.getItem('usertype');
 			const userID = localStorage.getItem('user');
-			console.log(userID);
 			dispatch(authSuccess(token, usertype, userID));
 			dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
 		}

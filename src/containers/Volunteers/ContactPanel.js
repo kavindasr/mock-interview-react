@@ -46,7 +46,6 @@ const ContactPanel = (props) => {
     getUser(props.userId).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
-        console.log(response);
         setParticipants(response.data);
       }
     });
@@ -64,7 +63,6 @@ const ContactPanel = (props) => {
       }
       needHelp(props.userId,data)
         .then((response) => {
-          console.log(response);
             if (!response.error) {
                 addAlert({
                     message: "Request sent Successfully!",
@@ -78,7 +76,7 @@ const ContactPanel = (props) => {
   const showneedHelp = useCallback(
     (participants) => (
       <Switch
-        checked={participants.needHelp || ''}
+        checked={participants.needHelp || false}
         onClick={() => askforVolunteer()}
         name="checkedB"
         color="primary"

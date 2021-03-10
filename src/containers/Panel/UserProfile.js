@@ -69,7 +69,6 @@ const UserProfile = (props) =>{
     getInterviewee(data).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
-        console.log(response);
         setParticipant(response.data);
       }
     });

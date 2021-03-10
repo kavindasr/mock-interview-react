@@ -25,7 +25,6 @@ const Companies = props => {
         .then((response) => {
           if (!response.error) {
             // (response.data).forEach(user => setUsers(user));
-            console.log(response)
             setComanies(response.data)
           }
         })
@@ -34,8 +33,6 @@ const Companies = props => {
   useEffect(() => {
 		let socket = getSocket();
 		socket.on('interviewee', (method, data) => {
-			console.log(`interviewwee ${method}`);
-			console.log(data);
 			switch (method) {
 				case 'post':
 					setComanies(addItemToArray(companies, data));
@@ -61,7 +58,6 @@ const Companies = props => {
       return new Promise((resolve, reject) => {
         deleteInterviewee(oldcompanies.intervieweeID)
               .then((response) => {
-                console.log(response);
                   if (!response.error) {
                       addAlert({
                           message: "Interviewee deletion Successful!",
@@ -90,7 +86,6 @@ const Companies = props => {
         "cv": newCompanies.cv,
         "intervieweeImg": imageUrl,
       })
-      console.log(data)
       return new Promise((resolve, reject) => {
         updateInterviewee(oldCompanies.intervieweeID, data)
               .then((response) => {

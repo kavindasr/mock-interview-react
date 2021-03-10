@@ -18,7 +18,6 @@ function Navbar(props) {
     getUser(props.userId).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
-        console.log(response);
         setPanel(response.data);
       }
     });
@@ -48,7 +47,6 @@ function Navbar(props) {
 
   window.addEventListener('resize', showButton);
 
-  console.log(panel)
   return (
     <>
       <nav className='navbar'>

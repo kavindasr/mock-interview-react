@@ -45,7 +45,6 @@ const UserProfile = (props) => {
     ContactVolunteer(props.userId).then((response) => {
       if (!response.error) {
         // (response.data).forEach(user => setUsers(user));
-        console.log(response);
         setParticipants(response.data);
       }
     });
@@ -63,7 +62,6 @@ const UserProfile = (props) => {
       }
       needHelp(props.userId,data)
         .then((response) => {
-          console.log(response);
             if (!response.error) {
                 addAlert({
                     message: "Request sent Successfully!",
