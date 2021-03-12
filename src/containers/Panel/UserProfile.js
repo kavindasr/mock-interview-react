@@ -93,7 +93,8 @@ const UserProfile = (props) =>{
         "interviewID":data,
         "feedback":value
       }
-      addFeedback(data)
+
+      addFeedback(datas)
         .then((response) => {
             if (!response.error) {
                 addAlert({
