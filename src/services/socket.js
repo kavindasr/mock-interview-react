@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 let socket = null;
 export function initialize() {
 	if (socket == null) {
-		socket = io('http://localhost:9000');
+		socket = io('https://api.riseupmora.com/');
 	}
 	return socket;
 }

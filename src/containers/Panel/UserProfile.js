@@ -16,7 +16,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 // const cloudinaryCore = new cloudinary.Cloudinary({cloud_name: 'isuruieee'});
 import {Image} from 'cloudinary-react';
 import TextField from '@material-ui/core/TextField';
-import * as actions from '../../store/actions/index';
+import Alert from '../../components/UI/FHAlert/FHAlert';
+import { removeAlert } from "../../store/actions/index";
+import { addAlert } from '../../store/actions/index';
 
 
 // import avatar from "assets/img/faces/marc.jpg";
@@ -63,7 +65,6 @@ const UserProfile = (props) =>{
   const classes = useStyles();
   const { data } = props;
   const { addAlert } = props;
-
   const [participant, setParticipant] = useState([]);
   useEffect(() => {
     getInterviewee(data).then((response) => {
@@ -80,10 +81,19 @@ const UserProfile = (props) =>{
     setValue(event.target.value);
   };
 
-  const onSubmitHandler = useCallback((event) => {
-    event.preventDefault()
+  const removeAlert = props.removeAlert;
+  const handleAlertClose = useCallback((alertId) => {
+      removeAlert(alertId);
+  }, [removeAlert]);
 
-      addFeedback(value)
+
+  const onSubmitHandler = useCallback((event) => {
+      event.preventDefault()
+      let datas={
+        "interviewID":data,
+        "feedback":value
+      }
+      addFeedback(data)
         .then((response) => {
             if (!response.error) {
                 addAlert({
@@ -93,10 +103,11 @@ const UserProfile = (props) =>{
         })
 
     
-  }, [value,  addAlert]);
+  }, [value,  addAlert,data]);
 
   return (
       <div className={classes.root}>
+        <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} /> 
         <Card profile  className={classes.card}>
               {/* <CardAvatar profile>
                   <Image cloudName="isuruieee" publicId={participant.intervieweeImg} width="100%" height="100%" />
@@ -133,10 +144,19 @@ const UserProfile = (props) =>{
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+      error: state.auth.error,
+      isAuthenticated: state.auth.token != null,
+      alerts: state.alert.alerts,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAlert: alert => dispatch(actions.addAlert(alert))
+    addAlert: (alert) => dispatch(addAlert(alert)),
+    removeAlert: (alertId) => dispatch(removeAlert(alertId))
   };
 }
 
-export default connect(null, mapDispatchToProps)(UserProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
