@@ -92,7 +92,7 @@ const Users = props => {
     (newCompanies) => {
       var data=({
           "panelID": props.userId[0],
-          "intervieweeID" : newCompanies.intervieweeID, 
+          "intervieweeID" : newCompanies.interviewID, 
       })
       return new Promise((resolve, reject) => {
         saveInterviewees(data)
@@ -120,8 +120,8 @@ const Users = props => {
   // );
 
   const tableColumns = [
-    { title: "Interviewee ID", field: "intervieweeID" },
-    { title: "Interview ID", field: "interviewID", editable:"never" },
+    { title: "Interviewee ID", field: "intervieweeID", editable:"never" },
+    { title: "Interview ID", field: "interviewID" },
     { title: "Name", field: "name", editable:"never"  },
     { title: "Email", field: "email", editable:"never"  },
     { title: "Contact Number", field: "contactNo", editable:"never"  },
