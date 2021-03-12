@@ -127,7 +127,7 @@ const Users = (props) => {
       <Button
         color="primary"
         onClick={() => {
-          setCurentUser(rowData.interviewID)
+          setCurentUser(rowData.intervieweeID)
           setIsEdit(false);
           setIsModalOpen(true);
         }}
