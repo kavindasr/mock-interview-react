@@ -8,6 +8,8 @@ import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
 import {getSocket} from '../../services/socket';
 import Navbar from "../../components/UI/Navbar/NavbarVolun";
+import { removeAlert } from "../../store/actions/index";
+import Alert from '../../components/UI/FHAlert/FHAlert';
 
 const CompanyTable = "Interviewee Table";
 
@@ -75,6 +77,11 @@ const Companies = props => {
     [addAlert, companies]
   );
 
+  const removeAlert = props.removeAlert;
+    const handleAlertClose = useCallback((alertId) => {
+        removeAlert(alertId);
+    }, [removeAlert]);
+
   const updateCompany = useCallback(
     (newCompanies,oldCompanies) => {
       var data=({
@@ -97,6 +104,7 @@ const Companies = props => {
                       return resolve();
                   }
                   addAlert({
+                    severity: "error",
                     message: "Failed!",
                   });
                   return reject();
@@ -199,6 +207,7 @@ const Companies = props => {
     return(
       <React.Fragment>
         <Navbar companyName="ABC Company" link="uom.lk"/>
+        <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
         <Table
           data={companies}
           title={CompanyTable}
@@ -218,14 +227,16 @@ const Companies = props => {
 const mapStateToProps = (state) => {
   return {
       error: state.auth.error,
-      userId:state.auth.userId,
-  }
-}
+      userId: state.auth.userId,
+      alerts: state.alert.alerts,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAlert: alert => dispatch(actions.addAlert(alert))
+      addAlert: (alert) => dispatch(actions.addAlert(alert)),
+      removeAlert: (alertId) => dispatch(removeAlert(alertId))
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Companies);

@@ -2,10 +2,8 @@ import React, { useState, useCallback}  from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -18,7 +16,7 @@ import { buildTextFields } from '../../helpers/uiHelpers';
 import { auth } from '../../store/actions/index';
 import { addAlert } from '../../store/actions/index';
 import * as routez from '../../shared/routes';
-import backImg from "../../helpers/images/rum.png";
+import backImg from "../../helpers/images/temp.jpg";
 
 const inputDefinitions = {
     gmail: {
@@ -60,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        position: "absolute",
+        // boxShadow: 5,
+        top: "50%",
+        left: "20%",
+        transform: "translate(-50%, -50%)",
     },
     avatar: {
         margin: theme.spacing(1),
@@ -180,12 +183,11 @@ function SignIn(props) {
   return (
     <Grid container component="main" className={classes.root}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={12} md={12} component={Paper} elevation={6} square className={classes.image} >
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
+                {/* <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
-                </Avatar>
+                </Avatar> */}
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
@@ -194,7 +196,7 @@ function SignIn(props) {
                     {inputFields}
                     <Button
                         type="submit"
-                        fullWidth
+                        // fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}

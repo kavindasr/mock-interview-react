@@ -7,6 +7,8 @@ import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
 import {getSocket} from '../../services/socket';
 import Navbar from "../../components/UI/Navbar/NavbarVolun";
+import { removeAlert } from "../../store/actions/index";
+import Alert from '../../components/UI/FHAlert/FHAlert';
 
 const IntervieweeTable = "Interviewee Table";
 
@@ -79,6 +81,7 @@ const Users = props => {
                       return resolve();
                   }
                   addAlert({
+                    severity: "error",
                     message: "Failed!",
                   });
                   return reject();
@@ -87,6 +90,11 @@ const Users = props => {
     },
     [addAlert, participants]
   );
+
+  const removeAlert = props.removeAlert;
+    const handleAlertClose = useCallback((alertId) => {
+        removeAlert(alertId);
+    }, [removeAlert]);
 
   const saveInterviee = useCallback(
     (newCompanies) => {
@@ -105,6 +113,7 @@ const Users = props => {
                       return resolve();
                   }
                   addAlert({
+                    severity: "error",
                     message: "Failed!",
                   });
                   return reject();
@@ -135,6 +144,7 @@ const Users = props => {
     return (
       <React.Fragment>
           <Navbar companyName="ABC Company" link="uom.lk"/>
+          <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
           <Table
             data={participants}
             title={IntervieweeTable}
@@ -153,16 +163,16 @@ const Users = props => {
 const mapStateToProps = (state) => {
   return {
       error: state.auth.error,
-      userId:state.auth.userId,
-  }
-}
+      userId: state.auth.userId,
+      alerts: state.alert.alerts,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAlert: alert => dispatch(actions.addAlert(alert))
+      addAlert: (alert) => dispatch(actions.addAlert(alert)),
+      removeAlert: (alertId) => dispatch(removeAlert(alertId))
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Users);
-
-// export default (Users);

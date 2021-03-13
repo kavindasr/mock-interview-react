@@ -9,6 +9,7 @@ import { replaceItemInArray, addItemToArray, removeItemFromArray, updateItemInAr
 import FHModal from "../../components/UI/FHModal/FHModal";
 import UserProfile from "../Panel/UserProfile"
 import Table from "../../components/UI/Table/MaterialTable/Table";
+import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -43,15 +44,18 @@ const Users = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurentUser] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getAllParticipants(props.userId).then((response) => {
-      if (!response.error) {
-        // (response.data).forEach(user => setUsers(user));
-        setParticipants(response.data);
-      }
-    });
-  }, [props.userId]);
+    if (isLoading) {
+      getAllParticipants(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setParticipants(response.data);
+        }
+      }).finally(() => setIsLoading(false));
+    }
+  }, [props.userId,isLoading]);
 
   useEffect(() => {
 		let socket = getSocket();
@@ -109,7 +113,7 @@ const Users = (props) => {
           }
           addAlert({
             message: "Failed!",
-            severity:"error",
+            severity: "error",
           });
           return reject();
         });
@@ -185,7 +189,7 @@ const Users = (props) => {
 
 
   if (false) {
-    //return <Spinner />
+    // return <Spinner />
   } else {
     return (
       <div className={classes.root}>
