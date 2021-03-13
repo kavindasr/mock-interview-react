@@ -163,7 +163,7 @@ const Companies = props => {
       <Button
         color="primary"
         onClick={() => {
-          setCurentUser(rowData.panelID)
+          setCurentUser(rowData.id)
           setIsEdit(false);
           setIsModalOpen(true);
         }}
