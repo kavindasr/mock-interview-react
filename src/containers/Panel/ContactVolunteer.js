@@ -15,6 +15,7 @@ import CardBody from "../../components/UI/Card/CardBody";
 import Navbar from "../../components/UI/Navbar/Navbar";
 import { removeAlert } from "../../store/actions/index";
 import Alert from '../../components/UI/FHAlert/FHAlert';
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 // import avatar from "assets/img/faces/marc.jpg";
 
@@ -41,14 +42,18 @@ const UserProfile = (props) => {
   const { addAlert } = props;
 
   const [participants, setParticipants] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    ContactVolunteer(props.userId).then((response) => {
-      if (!response.error) {
-        // (response.data).forEach(user => setUsers(user));
-        setParticipants(response.data);
-      }
-    });
-  }, [props]);
+    if (isLoading) {
+      ContactVolunteer(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setParticipants(response.data);
+        }
+      }).finally(() => setIsLoading(false));
+    }
+  }, [props,isLoading]);
 
   const removeAlert = props.removeAlert;
     const handleAlertClose = useCallback((alertId) => {
@@ -72,34 +77,38 @@ const UserProfile = (props) => {
     [addAlert,props.userId]
   );
 
-  return (
-    <div  className={classes.root}>
-          <Navbar companyName="ABC Company" link="uom.lk"/>
-          <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
-          <div className={classes.paper}>
-            <Card profile  className={classes.card}>
-              {/* <CardAvatar profile>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  <img href={#} alt="..." />
-                </a>
-              </CardAvatar> */}
-              <CardBody profile>
-                <h4 className={classes.cardTitle}>{participants.name}</h4>
-                <h4 className={classes.cardTitle}>{participants.email}</h4>
-                <h4 className={classes.cardTitle}>{participants.contactNo}</h4>
-                <p className={classes.description}>
-                  If you need to contact volunteer click ask for volunteer button. 
-                  Volunteer will enter to your zoom breakout room. If there's a emergency 
-                  need try to contact him through the mobile number
-                </p>
-                <Button color="success" round onClick={() => askforVolunteer()}>
-                  Ask for Vounteer
-                </Button>
-              </CardBody>
-            </Card>
-          </div>
-    </div>
-  );
+  if (isLoading) {
+    return <Spinner />
+  } else {
+    return (
+      <div  className={classes.root}>
+            <Navbar companyName="ABC Company" link="uom.lk"/>
+            <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
+            <div className={classes.paper}>
+              <Card profile  className={classes.card}>
+                {/* <CardAvatar profile>
+                  <a href="#pablo" onClick={e => e.preventDefault()}>
+                    <img href={#} alt="..." />
+                  </a>
+                </CardAvatar> */}
+                <CardBody profile>
+                  <h4 className={classes.cardTitle}>{participants.name}</h4>
+                  <h4 className={classes.cardTitle}>{participants.email}</h4>
+                  <h4 className={classes.cardTitle}>{participants.contactNo}</h4>
+                  <p className={classes.description}>
+                    If you need to contact volunteer click ask for volunteer button. 
+                    Volunteer will enter to your zoom breakout room. If there's a emergency 
+                    need try to contact him through the mobile number
+                  </p>
+                  <Button color="success" round onClick={() => askforVolunteer()}>
+                    Ask for Vounteer
+                  </Button>
+                </CardBody>
+              </Card>
+            </div>
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {

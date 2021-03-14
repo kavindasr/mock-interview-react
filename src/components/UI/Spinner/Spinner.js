@@ -1,9 +1,13 @@
 import React from 'react';
 import { CircularProgress } from '@material-ui/core';
+import Navbar from "../../../components/UI/Navbar/Navbar";
 
 const Spinner = (props) => {
     return (
-        <CircularProgress />
+        <React.Fragment>
+            <Navbar/>
+            <CircularProgress />
+        </React.Fragment>
     );
 }
 

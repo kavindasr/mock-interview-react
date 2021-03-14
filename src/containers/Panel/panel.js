@@ -17,6 +17,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../../components/UI/Navbar/Navbar";
 import {getSocket} from '../../services/socket';
 
+import { removeAlert } from "../../store/actions/index";
+import Alert from '../../components/UI/FHAlert/FHAlert';
+
 const IntervieweeTable = "Interviewee Table";
 
 const tableOptions = {
@@ -167,6 +170,11 @@ const Users = (props) => {
     []
   );
 
+  const removeAlert = props.removeAlert;
+    const handleAlertClose = useCallback((alertId) => {
+        removeAlert(alertId);
+    }, [removeAlert]);
+
   const tableColumns = [
     { title: 'Interviewee', field: 'intervieweeImg',editable: "never" , render: rowData => <img src={rowData.intervieweeImg} alt="ieee" style={{width: 40, borderRadius: '50%'}}/> },
     { title: "Interview ID", field: "interviewID", editable: "never", width: "10%" },
@@ -188,14 +196,14 @@ const Users = (props) => {
   ];
 
 
-  if (false) {
-    // return <Spinner />
+  if (isLoading) {
+    return <Spinner />
   } else {
     return (
       <div className={classes.root}>
         
         <Navbar/>
-
+        <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
         <div className={classes.paper}>
           <Table
             data={participants}
@@ -228,14 +236,16 @@ const Users = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    error: state.auth.error,
-    userId: state.auth.userId,
+      error: state.auth.error,
+      userId: state.auth.userId,
+      alerts: state.alert.alerts,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAlert: (alert) => dispatch(actions.addAlert(alert)),
+      addAlert: (alert) => dispatch(actions.addAlert(alert)),
+      removeAlert: (alertId) => dispatch(removeAlert(alertId))
   };
 };
 
