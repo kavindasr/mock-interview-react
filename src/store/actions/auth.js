@@ -74,7 +74,7 @@ export const auth = (email, password) => (dispatch) => {
 				socket.emit('subscribe', 'panel', response.data.panelID);
 			}
 			dispatch(authSuccess(response.data.token, response.data.type, response.data.panelID));
-			dispatch(checkAuthTimeout(authRequestTimeoutSec));
+			// dispatch(checkAuthTimeout(authRequestTimeoutSec));
 		} else {
 			dispatch(authFail('Invalid Username or Password'));
 		}
@@ -96,7 +96,7 @@ export const authCheckState = () => (dispatch) => {
 			const usertype = localStorage.getItem('usertype');
 			const userID = localStorage.getItem('user');
 			dispatch(authSuccess(token, usertype, userID));
-			dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
+			// dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
 		}
 	}
 }
