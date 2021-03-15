@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 let socket = null;
 export function initialize() {
 	if (socket == null) {
-		socket = io('https://api.riseupmora.com/');
+		socket = io('http://ieee-mock.us-east-2.elasticbeanstalk.com/',{secure: true});
 	}
 	return socket;
 }
