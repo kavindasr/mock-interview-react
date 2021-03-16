@@ -62,7 +62,7 @@ const Users = (props) => {
         }).finally(() => setIsLoading(false));
       }
     }
-  }, [props.userId,isLoading]);
+  }, [props,isLoading,participants]);
 
   useEffect(() => {
 		let socket = getSocket();
@@ -98,7 +98,7 @@ const Users = (props) => {
       });
     }
 
-	}, [participants]);
+	}, [participants,props]);
   const { addAlert } = props;
   // const [isLoading, setIsLoading] = useState(true);
 

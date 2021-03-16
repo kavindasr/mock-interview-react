@@ -9,8 +9,8 @@ import { authLogout, removeAlert } from "../../../store/actions/index";
 import {getUser} from "../../../api/PanelAPI";
 
 function Navbar(props) {
-  const [click, setClick] = useState(false);
-  const [button, setButton] = useState(true);
+  // const [click, setClick] = useState(false);
+  // const [button, setButton] = useState(true);
   const history = useHistory();
   const [panel, setPanel] = useState([]);
 
@@ -26,15 +26,15 @@ function Navbar(props) {
         }
       });
     }
-  }, [props.userId]);
+  }, [props]);
 
-  const showButton = () => {
-    if (window.innerWidth <= 960) {
-      setButton(false);
-    } else {
-      setButton(true);
-    }
-  };
+  // const showButton = () => {
+  //   if (window.innerWidth <= 960) {
+  //     setButton(false);
+  //   } else {
+  //     setButton(true);
+  //   }
+  // };
   
   const { onauthLogout } = props;
 
@@ -43,11 +43,11 @@ function Navbar(props) {
     history.push("/");
   };
 
-  useEffect(() => {
-    showButton();
-  }, []);
+  // useEffect(() => {
+  //   showButton();
+  // }, []);
 
-  window.addEventListener('resize', showButton);
+  // window.addEventListener('resize', showButton);
 
   return (
     <>
@@ -56,9 +56,9 @@ function Navbar(props) {
             {/* <img src="http://res.cloudinary.com/isuruieee/image/upload/v1615335946/pghlhnpejcvtozbv7li4.jpg" alt="IEEE" width="5%" height="30%"/> */}
           <p className="company">{panel.companyName}</p>
           <div className='menu-icon'>
-            <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
+            <i className={'fas fa-times'} />
           </div>
-          <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+          <ul className={'nav-menu active'}>
             
             
             <li className='nav-item'>
