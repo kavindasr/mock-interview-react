@@ -17,7 +17,7 @@ import IntervieweeList from '../src/containers/Volunteers/IntervieweeList';
 
 import * as actions from "./store/actions/index";
 import * as routez from './shared/routes';
-
+import {getSocket} from './services/socket'
 import './App.css';
 
 function App(props) {
@@ -26,6 +26,7 @@ function App(props) {
 
   useEffect(() => {
     onTryAutoSignIn();
+    getSocket();
   }, [onTryAutoSignIn]);
 
   let routes = (
