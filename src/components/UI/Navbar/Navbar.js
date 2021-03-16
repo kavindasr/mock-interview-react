@@ -10,29 +10,31 @@ import {getUser} from "../../../api/PanelAPI";
 
 function Navbar(props) {
   const [click, setClick] = useState(false);
-  const [button, setButton] = useState(true);
+  // const [button, setButton] = useState(true);
   const history = useHistory();
   const [panel, setPanel] = useState([]);
 
   useEffect(() => {
-    getUser(props.userId).then((response) => {
-      if (!response.error) {
-        // (response.data).forEach(user => setUsers(user));
-        setPanel(response.data);
-      }
-    });
+    if(props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
   }, [props.userId]);
 
   // const handleClick = () => setClick(!click);
   // const closeMobileMenu = () => setClick(false);
 
-  const showButton = () => {
-    if (window.innerWidth <= 960) {
-      setButton(false);
-    } else {
-      setButton(true);
-    }
-  };
+  // const showButton = () => {
+  //   if (window.innerWidth <= 960) {
+  //     setButton(false);
+  //   } else {
+  //     setButton(true);
+  //   }
+  // };
 
   const { onauthLogout } = props;
 
@@ -41,14 +43,13 @@ function Navbar(props) {
     history.push("/");
   };
 
-  useEffect(() => {
-    showButton();
-  }, []);
+  // useEffect(() => {
+  //   showButton();
+  // }, []);
 
-  window.addEventListener('resize', showButton);
+  // window.addEventListener('resize', showButton);
 
   return (
-    <>
       <nav className='navbar'>
         <div className='navbar-container'>
             {/* <img src="http://res.cloudinary.com/isuruieee/image/upload/v1615335946/pghlhnpejcvtozbv7li4.jpg" alt="IEEE" width="5%" height="35%"/> */}
@@ -90,7 +91,6 @@ function Navbar(props) {
          
         </div>
       </nav>
-    </>
   );
 }
 

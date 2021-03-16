@@ -18,12 +18,14 @@ function Navbar(props) {
   // const closeMobileMenu = () => setClick(false);
 
   useEffect(() => {
-    getUser(props.userId).then((response) => {
-      if (!response.error) {
-        // (response.data).forEach(user => setUsers(user));
-        setPanel(response.data);
-      }
-    });
+    if (props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
   }, [props.userId]);
 
   const showButton = () => {

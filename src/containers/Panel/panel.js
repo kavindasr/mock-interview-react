@@ -25,6 +25,7 @@ const IntervieweeTable = "Interviewee Table";
 const tableOptions = {
   pageSize: 10,
   pageSizeOptions: [10, 30, 50],
+  actionsColumnIndex: -1
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignContent: 'center',
     justifyContent: 'center',
-    justifyItems: 'center'
+    justifyItems: 'center',
+    minWidth:'1000px'
   },
 }));
 
@@ -51,46 +53,50 @@ const Users = (props) => {
 
   useEffect(() => {
     if (isLoading) {
-      getAllParticipants(props.userId).then((response) => {
-        if (!response.error) {
-          // (response.data).forEach(user => setUsers(user));
-          setParticipants(response.data);
-        }
-      }).finally(() => setIsLoading(false));
+      if(props.isAuthenticated){
+        getAllParticipants(props.userId).then((response) => {
+          if (!response.error) {
+            // (response.data).forEach(user => setUsers(user));
+            setParticipants(response.data);
+          }
+        }).finally(() => setIsLoading(false));
+      }
     }
   }, [props.userId,isLoading]);
 
   useEffect(() => {
 		let socket = getSocket();
-		socket.on('interview', (method, data) => {
-			switch (method) {
-				case 'post':
-					setParticipants(addItemToArray(participants, data));
-					break;
-				case 'put':
-					setParticipants(replaceItemInArray(participants, 'interviewID', data, data.interviewID));
-					break;
-				case 'delete':
-					setParticipants(removeItemFromArray(participants, 'interviewID', parseInt(data.id)));
-					break;
-				default:
-					console.log('Invalid method');
-					break;
-			}
-		});
-    socket.on('interviewee', (method, data) => {
-			switch (method) {
-				case 'put':
-					setParticipants(updateItemInArray(participants, 'intervieweeID', data));
-					break;
-				case 'delete':
-					setParticipants(removeItemFromArray(participants, 'intervieweeID', parseInt(data.id)));
-					break;
-				default:
-					console.log('Invalid method');
-					break;
-			}
-		});
+		if (props.isAuthenticated){
+      socket.on('interview', (method, data) => {
+        switch (method) {
+          case 'post':
+            setParticipants(addItemToArray(participants, data));
+            break;
+          case 'put':
+            setParticipants(replaceItemInArray(participants, 'interviewID', data, data.interviewID));
+            break;
+          case 'delete':
+            setParticipants(removeItemFromArray(participants, 'interviewID', parseInt(data.id)));
+            break;
+          default:
+            console.log('Invalid method');
+            break;
+        }
+      });
+      socket.on('interviewee', (method, data) => {
+        switch (method) {
+          case 'put':
+            setParticipants(updateItemInArray(participants, 'intervieweeID', data));
+            break;
+          case 'delete':
+            setParticipants(removeItemFromArray(participants, 'intervieweeID', parseInt(data.id)));
+            break;
+          default:
+            console.log('Invalid method');
+            break;
+        }
+      });
+    }
 
 	}, [participants]);
   const { addAlert } = props;
@@ -180,11 +186,6 @@ const Users = (props) => {
     { title: "Interview ID", field: "interviewID", editable: "never", width: "10%" },
     { title: "Name", field: "name", editable: "never" },
     {
-      title: "State",
-      field: "state",
-      lookup: { Ongoing: "Ongoing", Next: "Next", Done: "Done" },
-    },
-    {
       title: "Availability",
       field: "availability",
       lookup: { true: "Available", false: "Not-Available" },
@@ -193,6 +194,11 @@ const Users = (props) => {
     // { title: "Profile", render: renderProfileBtn },
     { title: "View CV", render: renderCVBtn },
     { title: "Profile", render: renderFeedbackBtn },
+    {
+      title: "State",
+      field: "state",
+      lookup: { Ongoing: "Ongoing", Next: "Next", Done: "Done" },
+    },
   ];
 
 
@@ -200,7 +206,7 @@ const Users = (props) => {
     return <Spinner />
   } else {
     return (
-      <div className={classes.root}>
+      <React.Fragment>
         
         <Navbar/>
         <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
@@ -214,7 +220,6 @@ const Users = (props) => {
               onRowUpdate: (newData, oldData) =>
                 updateInterviee(newData, oldData),
             }}
-            className={classes.table}
           />
         </div>
         <FHModal
@@ -229,7 +234,7 @@ const Users = (props) => {
           open={isModalOpen}
           handleClose={handleModalClose}
         />
-      </div>
+      </React.Fragment>
     );
   }
 };
@@ -239,6 +244,7 @@ const mapStateToProps = (state) => {
       error: state.auth.error,
       userId: state.auth.userId,
       alerts: state.alert.alerts,
+      isAuthenticated: state.auth.token !== null,
   };
 };
 

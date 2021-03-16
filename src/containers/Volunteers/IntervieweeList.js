@@ -14,7 +14,7 @@ import Alert from '../../components/UI/FHAlert/FHAlert';
 const CompanyTable = "Interviewee Table";
 
 const tableOptions = {
-  pageSize: 10,
+  pageSize: 30,
   pageSizeOptions: [10, 30, 50]
 };
 
@@ -69,6 +69,7 @@ const Companies = props => {
                   }
                   addAlert({
                     message: "Failed!",
+                    severity: "error",
                   });
                   return reject();
               })
@@ -130,12 +131,13 @@ const Companies = props => {
               .then((response) => {
                   if (!response.error) {
                       addAlert({
-                          message: "Company Saved Successfully!",
+                          message: "Interviewee Saved Successfully!",
                       });
                       setComanies(addItemToArray(companies, response.data))
                       return resolve();
                   }
                   addAlert({
+                    severity: "error",
                     message: "Failed!",
                   });
                   return reject();

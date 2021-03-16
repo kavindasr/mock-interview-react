@@ -101,7 +101,7 @@ const UserProfile = (props) => {
                     need try to contact him through the mobile number
                   </p>
                   <Button color="success" round onClick={() => askforVolunteer()}>
-                    Ask for Vounteer
+                    Ask for Volunteer
                   </Button>
                 </CardBody>
               </Card>

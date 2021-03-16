@@ -10,57 +10,62 @@ import Navbar from "../../components/UI/Navbar/NavbarVolun";
 import { removeAlert } from "../../store/actions/index";
 import Alert from '../../components/UI/FHAlert/FHAlert';
 
-const IntervieweeTable = "Interviewee Table";
+const IntervieweeTable = "Interview Table";
 
 const tableOptions = {
   pageSize: 10,
-  pageSizeOptions: [10, 30, 50]
+  pageSizeOptions: [10, 30, 50],
+  actionsColumnIndex: -1
 };
 
 const Users = props => {
 
   const [participants, setParticipants] = useState([]);
   useEffect(() => {
-      getAllParticipants(props.userId)
+      if(props.isAuthenticated){
+        getAllParticipants(props.userId)
         .then((response) => {
           if (!response.error) {
             // (response.data).forEach(user => setUsers(user));
             setParticipants(response.data)
           }
         })
+      }
   }, [props]);
   
   useEffect(() => {
 		let socket = getSocket();
-		socket.on('interview', (method, data) => {
-			switch (method) {
-				case 'post':
-					setParticipants(addItemToArray(participants, data));
-					break;
-				case 'put':
-					setParticipants(replaceItemInArray(participants, 'interviewID', data, data.interviewID));
-					break;
-				case 'delete':
-					setParticipants(removeItemFromArray(participants, 'interviewID', parseInt(data.id)));
-					break;
-				default:
-					console.log('Invalid method');
-					break;
-			}
-		});
-    socket.on('interviewee', (method, data) => {
-			switch (method) {
-				case 'put':
-					setParticipants(updateItemInArray(participants, 'intervieweeID', data));
-					break;
-				case 'delete':
-					setParticipants(removeItemFromArray(participants, 'intervieweeID', parseInt(data.id)));
-					break;
-				default:
-					console.log('Invalid method');
-					break;
-			}
-		});
+		if (props.isAuthenticated){
+      socket.on('interview', (method, data) => {
+        switch (method) {
+          case 'post':
+            setParticipants(addItemToArray(participants, data));
+            break;
+          case 'put':
+            setParticipants(replaceItemInArray(participants, 'interviewID', data, data.interviewID));
+            break;
+          case 'delete':
+            setParticipants(removeItemFromArray(participants, 'interviewID', parseInt(data.id)));
+            break;
+          default:
+            console.log('Invalid method');
+            break;
+        }
+      });
+      socket.on('interviewee', (method, data) => {
+        switch (method) {
+          case 'put':
+            setParticipants(updateItemInArray(participants, 'intervieweeID', data));
+            break;
+          case 'delete':
+            setParticipants(removeItemFromArray(participants, 'intervieweeID', parseInt(data.id)));
+            break;
+          default:
+            console.log('Invalid method');
+            break;
+        }
+      });
+    }
 	}, [participants]);
    const { addAlert } = props;
   // const [isLoading, setIsLoading] = useState(true);
@@ -154,6 +159,9 @@ const Users = props => {
               onRowAdd: newData =>saveInterviee(newData),
               onRowUpdate: (newData, oldData) =>updateInterviee(newData, oldData ),
             }}
+            options={{
+              actionsColumnIndex: -1
+            }}
           />
       </React.Fragment>
     )
@@ -165,6 +173,7 @@ const mapStateToProps = (state) => {
       error: state.auth.error,
       userId: state.auth.userId,
       alerts: state.alert.alerts,
+      isAuthenticated: state.auth.token !== null,
   };
 };
 
