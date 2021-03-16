@@ -5,10 +5,11 @@ export function initialize() {
 	if (socket == null) {
 		socket = io('https://api.riseupmora.com/',{rejectUnauthorized:false});
 		socket.on("disconnect", (reason) => {
-			if (reason === "io server disconnect") {
+			console.log(reason)
+			// if (reason === "io server disconnect") {
 			  // the disconnection was initiated by the server, you need to reconnect manually
 			  socket.connect();
-			}
+			// }
 			// else the socket will automatically try to reconnect
 		  });
 	}
