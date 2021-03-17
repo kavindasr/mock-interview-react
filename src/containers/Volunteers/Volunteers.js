@@ -1,5 +1,6 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
+import { makeStyles } from "@material-ui/core/styles";
 
 import {getAllParticipants, updateParticipants, saveInterviewees } from "../../api/VolunteerInterviewsAPI"
 import {getUser} from "../../api/PanelAPI";
@@ -19,8 +20,20 @@ const tableOptions = {
   actionsColumnIndex: -1
 };
 
-const Users = props => {
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: 'blue',
+    display:'flex',
+    alignContent: 'center',
+    justifyContent: 'center',
+    justifyItems: 'center',
+  },
+}));
 
+const Users = props => {
+  const classes = useStyles();
   const [participants, setParticipants] = useState([]);
   const [panel, setPanel] = useState([]);
 
@@ -47,8 +60,15 @@ const Users = props => {
   }, [props]);
   
   useEffect(() => {
-		let socket = getSocket();
 		if (props.isAuthenticated){
+      let socket = getSocket();
+      if (props.usertype.toLowerCase() === 'admin') {
+        socket.emit('subscribe', 'admin','name');
+      } else if (props.usertype.toLowerCase() ==='volunteer') {
+        socket.emit('subscribe', 'volunteer',props.userId);
+      } else if (props.usertype.toLowerCase() ==='panel'){
+        socket.emit('subscribe', 'panel',props.userId);
+      };
       socket.on('interview', (method, data) => {
         switch (method) {
           case 'post':
@@ -163,19 +183,21 @@ const Users = props => {
       <React.Fragment>
           <Navbar panel={panel}/>
           <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
-          <Table
-            data={participants}
-            title={IntervieweeTable}
-            columns={tableColumns}
-            tableOptions={tableOptions}
-            editable={{
-              onRowAdd: newData =>saveInterviee(newData),
-              onRowUpdate: (newData, oldData) =>updateInterviee(newData, oldData ),
-            }}
-            options={{
-              actionsColumnIndex: -1
-            }}
-          />
+          <div className={classes.paper}>
+            <Table
+              data={participants}
+              title={IntervieweeTable}
+              columns={tableColumns}
+              tableOptions={tableOptions}
+              editable={{
+                onRowAdd: newData =>saveInterviee(newData),
+                onRowUpdate: (newData, oldData) =>updateInterviee(newData, oldData ),
+              }}
+              options={{
+                actionsColumnIndex: -1
+              }}
+            />
+          </div>
       </React.Fragment>
     )
   }
@@ -186,6 +208,7 @@ const mapStateToProps = (state) => {
       error: state.auth.error,
       userId: state.auth.userId,
       alerts: state.alert.alerts,
+      usertype:state.auth.usertype,
       isAuthenticated: state.auth.token !== null,
   };
 };

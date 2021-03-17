@@ -33,13 +33,11 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    width: '100%',
     color: 'blue',
-    display: 'flex',
+    display:'flex',
     alignContent: 'center',
     justifyContent: 'center',
     justifyItems: 'center',
-    minWidth:'1000px'
   },
 }));
 
@@ -77,8 +75,15 @@ const Users = (props) => {
   }, [props,isLoading,participants]);
 
   useEffect(() => {
-		let socket = getSocket();
 		if (props.isAuthenticated){
+      let socket = getSocket();
+      if (props.usertype.toLowerCase() === 'admin') {
+        socket.emit('subscribe', 'admin','name');
+      } else if (props.usertype.toLowerCase() ==='volunteer') {
+        socket.emit('subscribe', 'volunteer',props.userId);
+      } else if (props.usertype.toLowerCase() ==='panel'){
+        socket.emit('subscribe', 'panel',props.userId);
+      };
       socket.on('interview', (method, data) => {
         switch (method) {
           case 'post':
@@ -220,7 +225,7 @@ const Users = (props) => {
     return (
       <React.Fragment>
         
-        <Navbar panel={panel}/>
+        <Navbar panel={panel} />
         <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
         <div className={classes.paper}>
           <Table
@@ -256,6 +261,7 @@ const mapStateToProps = (state) => {
       error: state.auth.error,
       userId: state.auth.userId,
       alerts: state.alert.alerts,
+      usertype:state.auth.usertype,
       isAuthenticated: state.auth.token !== null,
   };
 };

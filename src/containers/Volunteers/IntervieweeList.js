@@ -1,6 +1,7 @@
 import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
 import Axios from 'axios';
+import { makeStyles } from "@material-ui/core/styles";
 
 import {getAllInterviewee, deleteInterviewee, updateInterviewee, saveInterviewee } from "../../api/IntervieweeAPI";
 import {getUser} from "../../api/PanelAPI";
@@ -19,8 +20,20 @@ const tableOptions = {
   pageSizeOptions: [10, 30, 50]
 };
 
-const Companies = props => {
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: 'blue',
+    display:'flex',
+    alignContent: 'center',
+    justifyContent: 'center',
+    justifyItems: 'center',
+  },
+}));
 
+const Companies = props => {
+  const classes = useStyles();
   const [companies, setComanies ] = useState([]);
   const [imageUrl,setimageUrl] =useState("");
   const [panel, setPanel] = useState([]);
@@ -46,24 +59,33 @@ const Companies = props => {
   }, [props.userId]);
 
   useEffect(() => {
-		let socket = getSocket();
-		socket.on('interviewee', (method, data) => {
-			switch (method) {
-				case 'post':
-					setComanies(addItemToArray(companies, data));
-					break;
-				case 'put':
-					setComanies(replaceItemInArray(companies, 'intervieweeID', data, data.intervieweeID));
-					break;
-				case 'delete':
-					setComanies(removeItemFromArray(companies, 'intervieweeID', parseInt(data.id)));
-					break;
-				default:
-					console.log('Invalid method');
-					break;
-			}
-		});
-	}, [companies]);
+    if (props.isAuthenticated){
+      let socket = getSocket();
+      if (props.usertype.toLowerCase() === 'admin') {
+        socket.emit('subscribe', 'admin','name');
+      } else if (props.usertype.toLowerCase() ==='volunteer') {
+        socket.emit('subscribe', 'volunteer',props.userId);
+      } else if (props.usertype.toLowerCase() ==='panel'){
+        socket.emit('subscribe', 'panel',props.userId);
+      };
+      socket.on('interviewee', (method, data) => {
+        switch (method) {
+          case 'post':
+            setComanies(addItemToArray(companies, data));
+            break;
+          case 'put':
+            setComanies(replaceItemInArray(companies, 'intervieweeID', data, data.intervieweeID));
+            break;
+          case 'delete':
+            setComanies(removeItemFromArray(companies, 'intervieweeID', parseInt(data.id)));
+            break;
+          default:
+            console.log('Invalid method');
+            break;
+        }
+      });
+    }
+	}, [companies,props]);
   
    const { addAlert } = props;
   // const [isLoading, setIsLoading] = useState(true);
@@ -223,17 +245,19 @@ const Companies = props => {
       <React.Fragment>
         <Navbar panel={panel}/>
         <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
-        <Table
-          data={companies}
-          title={CompanyTable}
-          columns={tableColumns}
-          tableOptions={tableOptions}
-          editable={{
-            onRowAdd: newData =>saveCompany(newData),
-            onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
-            onRowDelete: oldData => deleteCompany(oldData),
-          }}
-        />
+        <div className={classes.paper}>
+          <Table
+            data={companies}
+            title={CompanyTable}
+            columns={tableColumns}
+            tableOptions={tableOptions}
+            editable={{
+              onRowAdd: newData =>saveCompany(newData),
+              onRowUpdate: (newData, oldData) =>updateCompany(newData, oldData ),
+              onRowDelete: oldData => deleteCompany(oldData),
+            }}
+          />
+        </div>
       </React.Fragment>
     )
   }
@@ -245,6 +269,7 @@ const mapStateToProps = (state) => {
       userId: state.auth.userId,
       alerts: state.alert.alerts,
       isAuthenticated: state.auth.token !== null,
+      usertype:state.auth.usertype,
   };
 };
 
