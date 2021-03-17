@@ -2,7 +2,8 @@ import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
 import Axios from 'axios';
 
-import {getAllInterviewee, deleteInterviewee, updateInterviewee, saveInterviewee } from "../../api/IntervieweeAPI"
+import {getAllInterviewee, deleteInterviewee, updateInterviewee, saveInterviewee } from "../../api/IntervieweeAPI";
+import {getUser} from "../../api/PanelAPI";
 import {replaceItemInArray, removeItemFromArray, addItemToArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
@@ -22,6 +23,18 @@ const Companies = props => {
 
   const [companies, setComanies ] = useState([]);
   const [imageUrl,setimageUrl] =useState("");
+  const [panel, setPanel] = useState([]);
+
+  useEffect(() => {
+    if(props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
+  }, [props]);
   useEffect(() => {
     getAllInterviewee()
         .then((response) => {
@@ -208,7 +221,7 @@ const Companies = props => {
   } else {
     return(
       <React.Fragment>
-        <Navbar companyName="ABC Company" link="uom.lk"/>
+        <Navbar panel={panel}/>
         <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
         <Table
           data={companies}
@@ -231,6 +244,7 @@ const mapStateToProps = (state) => {
       error: state.auth.error,
       userId: state.auth.userId,
       alerts: state.alert.alerts,
+      isAuthenticated: state.auth.token !== null,
   };
 };
 

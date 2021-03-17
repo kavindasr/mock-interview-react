@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import {
   ContactVolunteer,
 } from "../../api/PanelAPI";
+import {getUser} from "../../api/PanelAPI";
 import {needHelp} from "../../api/OtherApi"
 import * as actions from "../../store/actions/index";
 // @material-ui/core components
@@ -43,6 +44,18 @@ const UserProfile = (props) => {
 
   const [participants, setParticipants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [panel, setPanel] = useState([]);
+
+  useEffect(() => {
+    if(props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
+  }, [props]);
 
   useEffect(() => {
     if (isLoading) {
@@ -82,7 +95,7 @@ const UserProfile = (props) => {
   } else {
     return (
       <div  className={classes.root}>
-            <Navbar companyName="ABC Company" link="uom.lk"/>
+            <Navbar panel={panel}/>
             <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
             <div className={classes.paper}>
               <Card profile  className={classes.card}>
@@ -116,6 +129,7 @@ const mapStateToProps = (state) => {
         error: state.auth.error,
         userId: state.auth.userId,
         alerts: state.alert.alerts,
+        isAuthenticated: state.auth.token !== null,
     };
 };
 

@@ -87,7 +87,7 @@ const ContactPanel = (props) => {
 
   return (
     <div  className={classes.root}>
-          <Navbar companyName="ABC Company" link="uom.lk"/>
+          <Navbar panel={participants}/>
           <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
           <div className={classes.paper}>
             <Card profile  className={classes.card}>

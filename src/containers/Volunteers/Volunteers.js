@@ -2,6 +2,7 @@ import React , {useState, useEffect, useCallback } from "react";
 import { connect } from 'react-redux';
 
 import {getAllParticipants, updateParticipants, saveInterviewees } from "../../api/VolunteerInterviewsAPI"
+import {getUser} from "../../api/PanelAPI";
 import {replaceItemInArray, addItemToArray, removeItemFromArray, updateItemInArray} from "../../shared/utility";
 import Table from "../../components/UI/Table/MaterialTable/Table";
 import * as actions from '../../store/actions/index';
@@ -21,6 +22,18 @@ const tableOptions = {
 const Users = props => {
 
   const [participants, setParticipants] = useState([]);
+  const [panel, setPanel] = useState([]);
+
+  useEffect(() => {
+    if(props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
+  }, [props]);
   useEffect(() => {
       if(props.isAuthenticated){
         getAllParticipants(props.userId)
@@ -148,7 +161,7 @@ const Users = props => {
   } else {
     return (
       <React.Fragment>
-          <Navbar companyName="ABC Company" link="uom.lk"/>
+          <Navbar panel={panel}/>
           <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
           <Table
             data={participants}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -6,28 +6,14 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 import { authLogout, removeAlert } from "../../../store/actions/index";
-import {getUser} from "../../../api/PanelAPI";
 
 function Navbar(props) {
   // const [click, setClick] = useState(false);
   // const [button, setButton] = useState(true);
   const history = useHistory();
-  const [panel, setPanel] = useState([]);
 
   // const handleClick = () => setClick(!click);
   // const closeMobileMenu = () => setClick(false);
-
-  useEffect(() => {
-    if (props.isAuthenticated){
-      getUser(props.userId).then((response) => {
-        if (!response.error) {
-          // (response.data).forEach(user => setUsers(user));
-          setPanel(response.data);
-        }
-      });
-    }
-  }, [props]);
-
   // const showButton = () => {
   //   if (window.innerWidth <= 960) {
   //     setButton(false);
@@ -54,7 +40,7 @@ function Navbar(props) {
       <nav className='navbar'>
         <div className='navbar-container'>
             {/* <img src="http://res.cloudinary.com/isuruieee/image/upload/v1615335946/pghlhnpejcvtozbv7li4.jpg" alt="IEEE" width="5%" height="30%"/> */}
-          <p className="company">{panel.companyName}</p>
+          <p className="company">{props.panel? props.panel.companyName : " " }</p>
           <div className='menu-icon'>
             <i className={'fas fa-times'} />
           </div>

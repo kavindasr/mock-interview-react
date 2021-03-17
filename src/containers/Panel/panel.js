@@ -5,6 +5,7 @@ import {
   getAllParticipants,
   updateParticipants,
 } from "../../api/InterviewsAPI";
+import {getUser} from "../../api/PanelAPI";
 import { replaceItemInArray, addItemToArray, removeItemFromArray, updateItemInArray } from "../../shared/utility";
 import FHModal from "../../components/UI/FHModal/FHModal";
 import UserProfile from "../Panel/UserProfile"
@@ -50,7 +51,18 @@ const Users = (props) => {
   const [currentUser, setCurentUser] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [panel, setPanel] = useState([]);
 
+  useEffect(() => {
+    if(props.isAuthenticated){
+      getUser(props.userId).then((response) => {
+        if (!response.error) {
+          // (response.data).forEach(user => setUsers(user));
+          setPanel(response.data);
+        }
+      });
+    }
+  }, [props]);
   useEffect(() => {
     if (isLoading) {
       if(props.isAuthenticated){
@@ -208,7 +220,7 @@ const Users = (props) => {
     return (
       <React.Fragment>
         
-        <Navbar/>
+        <Navbar panel={panel}/>
         <Alert handleAlertClose={handleAlertClose} alerts={props.alerts} />
         <div className={classes.paper}>
           <Table
