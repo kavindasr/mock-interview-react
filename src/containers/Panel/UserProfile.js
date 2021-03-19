@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 const UserProfile = (props) =>{
   const classes = useStyles();
   const { data } = props;
+  const { dataid } = props;
   const { addAlert } = props;
   const [participant, setParticipant] = useState([]);
   useEffect(() => {
@@ -90,10 +91,9 @@ const UserProfile = (props) =>{
   const onSubmitHandler = useCallback((event) => {
       event.preventDefault()
       let datas={
-        "interviewID":data,
+        "interviewID":dataid,
         "feedback":value
       }
-
       addFeedback(datas)
         .then((response) => {
             if (!response.error) {
@@ -104,7 +104,7 @@ const UserProfile = (props) =>{
         })
 
     
-  }, [value,  addAlert,data]);
+  }, [value,  addAlert,dataid]);
 
   return (
       <div className={classes.root}>

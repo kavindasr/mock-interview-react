@@ -47,6 +47,7 @@ const Users = (props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurentUser] = useState({});
+  const [currentInterview, setCurrentInterview] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [panel, setPanel] = useState([]);
@@ -157,6 +158,7 @@ const Users = (props) => {
       <Button
         color="primary"
         onClick={() => {
+          setCurrentInterview(rowData.interviewID)
           setCurentUser(rowData.intervieweeID)
           setIsEdit(false);
           setIsModalOpen(true);
@@ -244,6 +246,7 @@ const Users = (props) => {
           body={
             <UserProfile
               data={currentUser}
+              dataid={currentInterview}
               isEdit={isEdit}
               setIsModalOpen={setIsModalOpen}
             />
