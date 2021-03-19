@@ -50,6 +50,7 @@ const Users = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [panel, setPanel] = useState([]);
+	const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     if(props.isAuthenticated){
@@ -73,17 +74,13 @@ const Users = (props) => {
       }
     }
   }, [props,isLoading,participants]);
+  
+	useEffect(() => {
+		setSocket(getSocket({ usertype: 'volunteer', userId: props.userId }));
+	}, [socket, props]);
 
   useEffect(() => {
-		if (props.isAuthenticated){
-      let socket = getSocket();
-      if (props.usertype.toLowerCase() === 'admin') {
-        socket.emit('subscribe', 'admin','name');
-      } else if (props.usertype.toLowerCase() ==='volunteer') {
-        socket.emit('subscribe', 'volunteer',props.userId);
-      } else if (props.usertype.toLowerCase() ==='panel'){
-        socket.emit('subscribe', 'panel',props.userId);
-      };
+		if (props.isAuthenticated && socket != null){
       socket.on('interview', (method, data) => {
         switch (method) {
           case 'post':
@@ -114,8 +111,11 @@ const Users = (props) => {
         }
       });
     }
+    else{
+      console.log("connection not established");
+    }
 
-	}, [participants,props]);
+	}, [participants,props,socket]);
   const { addAlert } = props;
   // const [isLoading, setIsLoading] = useState(true);
 
