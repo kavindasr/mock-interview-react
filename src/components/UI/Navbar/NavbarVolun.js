@@ -59,7 +59,7 @@ function Navbar(props) {
             </li>
             <li className='nav-item'>
               <Link to='/contactpanel' className='nav-links'>
-                Contact Pannel
+                Contact Panel
               </Link>
             </li>
             {/* <li className='nav-item'>
